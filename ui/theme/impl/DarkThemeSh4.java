@@ -33,7 +33,8 @@ public class DarkThemeSh4 extends ShellTheme {
 		colors = new HashMap<>();
 		colors.put("background", new Color(0, 0, 0, 255));
 		colors.put("writing", new Color(255, 254, 254));
-		colors.put("dragbar", new Color(255, 255, 255));
+		colors.put("dragbar_start", new Color(255, 255, 255));
+		colors.put("dragbar_end", new Color(220, 218, 218));
 		colors.put("owner", new Color(56, 56, 56));
 		opacity = 255;
 	}
@@ -80,10 +81,10 @@ public class DarkThemeSh4 extends ShellTheme {
 		int shellHeight = (int) Shell._self.values().get("shell_height").getValue();
 		Gui.drawRect(shellX, shellY + DRAGBAR_HEIGHT, shellX + shellWidth, shellY + DRAGBAR_HEIGHT + shellHeight, colors.get("background").getRGB());
 		GL11.glPushMatrix();
-		RenderMethods.drawRoundedRect(shellX, shellY, shellWidth, DRAGBAR_HEIGHT, 15, colors.get("dragbar").getRGB());
+		RenderMethods.drawGradientRect(shellX, shellY, shellX + shellWidth, shellY + DRAGBAR_HEIGHT, colors.get("dragbar_start").getRGB(), colors.get("dragbar_end").getRGB());
 		GL11.glPopMatrix();
-		biggerFont.drawString(Shell._self.getWritingInput().toString(), shellX + 5, shellY + shellHeight + 8, colors.get("writing").getRGB());
-		titleFont.drawString(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase(), shellX + shellWidth / 2f - titleFont.getStringWidth(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase())/2f, shellY + 7, colors.get("owner").getRGB());
+		titleFont.drawString(Shell._self.getWritingInput().toString(), shellX + 5, shellY + shellHeight + 8, colors.get("writing").getRGB());
+		titleFont.drawString(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase(), shellX + shellWidth / 2f - titleFont.getStringWidth(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase())/2f, shellY + 8, colors.get("owner").getRGB());
         if (cursorTicks>=75)
             Gui.drawRect(shellX + 5 + biggerFont.getStringWidth(Shell._self.getWritingInput().toString())+1, shellY+shellHeight+6, shellX + 5 + biggerFont.getStringWidth(Shell._self.getWritingInput().toString())+6, shellY+shellHeight+14, colors.get("writing").getRGB());
         if (cursorTicks--<=0)
@@ -93,7 +94,7 @@ public class DarkThemeSh4 extends ShellTheme {
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		colors.put("writing", new Color(201, 201, 201));
-		colors.put("background", new Color(0, 0, 0, 200));
+		colors.put("background", new Color(0, 0, 0, 230));
 	}
 
 	@Override
