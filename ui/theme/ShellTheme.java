@@ -82,7 +82,7 @@ public abstract class ShellTheme {
             }
             case TOP: {
                 return mouseX >= Shell._self.getX() && mouseX <= Shell._self.getX() + Shell._self.getWidth()
-                        && mouseY >= Shell._self.getY() && mouseY <= Shell._self.getY() + Shell._self.getY() + dragBarHeight;
+                        && mouseY >= Shell._self.getY() && mouseY <= Shell._self.getY()  + dragBarHeight;
             }
             case BOTTOM: {
                 return mouseX >= Shell._self.getX() && mouseX <= Shell._self.getX() + Shell._self.getWidth()
