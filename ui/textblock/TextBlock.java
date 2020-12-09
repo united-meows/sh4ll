@@ -1,7 +1,6 @@
 package sh4ll.ui.textblock;
 
 
-import optifine.FontUtils;
 import sh4ll.etc.Tuple;
 
 public abstract class TextBlock {

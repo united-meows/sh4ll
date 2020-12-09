@@ -2,13 +2,10 @@ package sh4ll.ui;
 
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.openal.AL;
 import sh4ll.Shell;
 import sh4ll.ui.theme.ShellTheme;
-import sh4ll.util.MinecraftFontRenderer;
 import sh4ll.wrapper.ShellUIWrapper;
 
-import java.security.Key;
 
 public class UIShell {
 
@@ -35,10 +32,10 @@ public class UIShell {
             Shell._self.getWritingInput().append(typedChar);
             return;
         }
-        if (Shell._self.getWritingInput().length() > 0) {
 
-            if (keyCode == Keyboard.KEY_RETURN) {
-                Shell._self.getWritingInput().delete(0, Shell._self.getWritingInput().length() - 1);
+        if (Shell._self.getWritingInput().length() > 0) {
+            if (keyCode == Keyboard.KEY_RETURN) {         	
+                Shell._self.getWritingInput().delete(0, Shell._self.getWritingInput().length());
             }
         }
     }

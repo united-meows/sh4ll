@@ -32,7 +32,7 @@ public class Shell {
         dynamic().put("client_name", new XValue<String>().setValue(clientName));
         dynamic().put("client_username", new XValue<String>().setValue(userName));
     }
-    //ipana coder best noob
+
     public void setup(final String clientName) {
         setup(clientName, "user");
     }

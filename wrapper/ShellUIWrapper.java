@@ -1,12 +1,11 @@
 package sh4ll.wrapper;
 
-import net.minecraft.client.gui.GuiScreen;
-import org.lwjgl.input.Keyboard;
-import sh4ll.Shell;
-import sh4ll.util.MinecraftFontRenderer;
-
 import java.io.IOException;
-import java.security.Key;
+
+import org.lwjgl.input.Keyboard;
+
+import net.minecraft.client.gui.GuiScreen;
+import sh4ll.Shell;
 
 public class ShellUIWrapper extends GuiScreen {
 
