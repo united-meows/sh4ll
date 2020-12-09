@@ -65,6 +65,10 @@ public class Shell {
 
         values().put("shell_x", new XValue<Integer>().setValue(-777));
         values().put("shell_y", new XValue<Integer>().setValue(-777));
+        values().put("shell_scroll_location", new XValue<Integer>().setValue(0));
+        values().put("shell_scrollbar_x", new XValue<Integer>().setValue(0));
+        values().put("shell_scrollbar_y", new XValue<Integer>().setValue(0));
+
 
 
         dynamic().put("mouse_x", new XValue<Integer>().setValue(1));

@@ -2,11 +2,13 @@ package sh4ll.ui.theme;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import sh4ll.Shell;
 import sh4ll.etc.IUpdatable;
 import sh4ll.etc.Tuple;
 import sh4ll.ui.DragMethod;
+import sh4ll.ui.textblock.TextBlock;
 import sh4ll.value.XValue;
 
 public abstract class ShellTheme {
@@ -173,6 +175,29 @@ public abstract class ShellTheme {
 	 * method from Minecraft's GuiScreen class
 	 */
 	public abstract void update();
+
+
+	public List<TextBlock> getRenderBlocks(int height) {
+		List<TextBlock> blocks = new ArrayList<>();
+		int currentHeight = 0;
+		int totalHeight = 0;
+		int scrollLoc = (int) Shell._self.values().get("shell_scroll_location").getValue();
+		for (TextBlock textBlock : Shell._self.outputs()) {
+			if (totalHeight >= height) break;
+
+			if (currentHeight >= scrollLoc) {
+				blocks.add(textBlock);
+			}
+
+			/* adds textblocks height */
+			currentHeight += textBlock.getTextLength().getSecond().getSecond();
+		}
+
+		return blocks;
+	}
+
+	public void
+
 
 	public void _clickDrag(int mouseX, int mouseY) {
 		Shell._self.values().get("shell_x").setValue(Shell._self.getX() + (mouseX - lastX));

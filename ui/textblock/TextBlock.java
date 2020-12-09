@@ -11,11 +11,12 @@ public abstract class TextBlock {
         text = _text;
     }
 
-    public abstract int draw(int startX, int width);
+    public abstract void draw(int startX, int width, int logStartX);
     public abstract void update();
+    public abstract void onClick(int mouseX, int mouseY);
 
-    // Returns block's line count and width
-    public abstract Tuple<Integer, Integer> getTextLength();
+    // Returns block's line count width, height
+    public abstract Tuple<Integer, Tuple<Integer, Integer>> getTextLength();
 
     public String getText() {
         return text;

@@ -5,6 +5,9 @@ import java.awt.Font;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.lwjgl.input.Cursor;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.Gui;
@@ -38,7 +41,7 @@ public class DarkThemeSh4 extends ShellTheme {
 	public DarkThemeSh4() {
 		super("DarkTheme", DragMethod.TOP, DRAGBAR_HEIGHT);
 		colors = new HashMap<>();
-		colors.put("background", new Color(0, 0, 0, 255));
+		colors.put("background", new Color(0, 0, 0, 230));
 		colors.put("writing", new Color(255, 254, 254));
 		colors.put("dragbar_start", new Color(255, 255, 255));
 		colors.put("dragbar_end", new Color(220, 218, 218));
@@ -67,6 +70,9 @@ public class DarkThemeSh4 extends ShellTheme {
 					for (Map.Entry<String, Color> entry : colors.entrySet()) {
 						if (opacity > 150) {
 							opacity--;
+							if (entry.getKey().equalsIgnoreCase("background") && opacity > 230) {
+								continue;
+							}
 							colors.put(entry.getKey(), new Color(entry.getValue().getRed(), entry.getValue().getGreen(),
 									entry.getValue().getBlue(), opacity));
 						}
@@ -75,6 +81,9 @@ public class DarkThemeSh4 extends ShellTheme {
 					for (Map.Entry<String, Color> entry : colors.entrySet()) {
 						if (opacity < 255) {
 							opacity++;
+							if (entry.getKey().equalsIgnoreCase("background") && opacity > 230) {
+								continue;
+							}
 							colors.put(entry.getKey(), new Color(entry.getValue().getRed(), entry.getValue().getGreen(),
 									entry.getValue().getBlue(), opacity));
 						}
@@ -101,11 +110,21 @@ public class DarkThemeSh4 extends ShellTheme {
 
 		final float writingWidth = titleFont.getStringWidth(Shell._self.getWritingInput().toString());
 
+		// TEXT BLOCKS CODE
+		// ==============================
+
+		// ==============================
+
+
+
      	// CURSOR (POINTER) CODE
 		// ===============================
 		Color insideColor = cursorState ? TRANSPARANT_COLOR : colors.get("cursor_inside");
 		RenderMethods.drawBorderedRect(6 + shellX + writingWidth, shellY + shellHeight + 5, 10 + shellX + writingWidth, shellY + shellHeight + 14, 0.5F, insideColor.getRGB(), colors.get("cursor_outline").getRGB());
         // ===============================
+
+		// SCALING CODE
+		// ===============================
         if (scaling) {
             if (side == Anchor.TOP || side == Anchor.TOP_RIGHT || side == Anchor.TOP_LEFT) {
 				Shell._self.values().get("shell_y").setValue(mouseY);
@@ -124,14 +143,13 @@ public class DarkThemeSh4 extends ShellTheme {
 			if (side == Anchor.RIGHT || side == Anchor.BOTTOM_RIGHT || side == Anchor.TOP_RIGHT) {
 				Shell._self.values().get("shell_width").setValue(mouseX-shellX);
 			}
-
         }
+		// ===============================
 	}
 
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		colors.put("writing", new Color(201, 201, 201));
-		colors.put("background", new Color(0, 0, 0, 230));
 		if (isSidesHovered(mouseX,mouseY)) {
 		    clickedX = mouseX;
 		    clickedY = mouseY;
@@ -202,5 +220,6 @@ public class DarkThemeSh4 extends ShellTheme {
 	public void mouseReleased(int mouseX, int mouseY, int state) {
         scaling = false;
 	}
+
 
 }
