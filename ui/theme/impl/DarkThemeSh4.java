@@ -27,6 +27,9 @@ public class DarkThemeSh4 extends ShellTheme {
 	private HashMap<String, Color> colors;
 	private static int DRAGBAR_HEIGHT = 20;
 	private int cursorTicks;
+	private boolean cursorState;
+
+	private static Color TRANSPARANT_COLOR = new Color(0,0,0,0);
 
 	public DarkThemeSh4() {
 		super("DarkTheme", DragMethod.TOP, DRAGBAR_HEIGHT);
@@ -36,6 +39,11 @@ public class DarkThemeSh4 extends ShellTheme {
 		colors.put("dragbar_start", new Color(255, 255, 255));
 		colors.put("dragbar_end", new Color(220, 218, 218));
 		colors.put("owner", new Color(56, 56, 56));
+
+
+
+		colors.put("cursor_outline", new Color(87, 85, 85, 255));
+		colors.put("cursor_inside", new Color(255, 255, 255, 255));
 		opacity = 255;
 	}
 
@@ -85,10 +93,16 @@ public class DarkThemeSh4 extends ShellTheme {
 		GL11.glPopMatrix();
 		titleFont.drawString(Shell._self.getWritingInput().toString(), shellX + 5, shellY + shellHeight + 8, colors.get("writing").getRGB());
 		titleFont.drawString(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase(), shellX + shellWidth / 2f - titleFont.getStringWidth(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase())/2f, shellY + 8, colors.get("owner").getRGB());
-        if (cursorTicks>=75)
-            Gui.drawRect(shellX + 5 + biggerFont.getStringWidth(Shell._self.getWritingInput().toString())+1, shellY+shellHeight+6, shellX + 5 + biggerFont.getStringWidth(Shell._self.getWritingInput().toString())+6, shellY+shellHeight+14, colors.get("writing").getRGB());
-        if (cursorTicks--<=0)
-            cursorTicks=150;
+
+
+		final float writingWidth = titleFont.getStringWidth(Shell._self.getWritingInput().toString());
+
+     	// CURSOR (POINTER) CODE
+		// ===============================
+		Color insideColor = cursorState ? TRANSPARANT_COLOR : colors.get("cursor_inside");
+		RenderMethods.drawBorderedRect(6 + shellX + writingWidth, shellY + shellHeight + 5, 10 + shellX + writingWidth, shellY + shellHeight + 14, 0.5F, insideColor.getRGB(), colors.get("cursor_outline").getRGB());
+        // ===============================
+
 	}
 
 	@Override
@@ -99,12 +113,24 @@ public class DarkThemeSh4 extends ShellTheme {
 
 	@Override
 	public void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
-		// defaultDrag();
+
 	}
 
 	@Override
 	public void update() {
+		// increment cursor tick
+		if (++cursorTicks >= 201) { cursorTicks = 0; }
 
+		// cursor state change
+		if (isTyping()) {
+			if (cursorTicks % 4 == 0) {
+				cursorState = !cursorState;
+			}
+		} else {
+			if (cursorTicks % 10 == 0) {
+				cursorState = !cursorState;
+			}
+		}
 	}
 
 	@Override

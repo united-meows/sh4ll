@@ -9,7 +9,7 @@ import sh4ll.wrapper.ShellUIWrapper;
 
 public class UIShell {
 
-    private static String ALLOWED_CHARS = " abcdefgğhıijklmnoöprsştuüvyzwxABCDEFGHIİJKLMNOÖPRSŞTUÜVYZXW0123456789_-~^$#-+%&@!'\"€₺æ/`\\()[]{}";
+    private static String ALLOWED_CHARS = " ;.,abcdefgğhıijklmnoöprsştuüvyzwxqABCDEFGHIİJKLMNOÖPRSŞTUÜVYZXQW0123456789?_-~^$#-+%&@!'\"€₺æ/`\\()[]{}";
 
     private ShellTheme theme;
     private ShellUIWrapper wrapper;
@@ -19,7 +19,6 @@ public class UIShell {
             wrapper = new ShellUIWrapper();
         }
         Minecraft.getMinecraft().displayGuiScreen(wrapper);
-
         theme.onEnable();
     }
 
@@ -27,7 +26,11 @@ public class UIShell {
         theme.onDisable();
     }
 
+
     public void keyTyped(char typedChar, int keyCode) {
+
+        // Update last key press time
+        getTheme().updateKeyPress();
         if (ALLOWED_CHARS.contains(String.valueOf(typedChar))) {
             Shell._self.getWritingInput().append(typedChar);
             return;
@@ -38,8 +41,10 @@ public class UIShell {
                 Shell._self.getWritingInput().delete(0, Shell._self.getWritingInput().length());
             }
         }
+
     }
 
+    /** gets current theme */
     public ShellTheme getTheme() {
         return theme;
     }

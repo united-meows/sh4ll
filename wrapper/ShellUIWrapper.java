@@ -60,7 +60,6 @@ public class ShellUIWrapper extends GuiScreen {
 
     @Override
     public void updateScreen() {
-
         if (Keyboard.isKeyDown(Keyboard.KEY_BACK) && Shell._self.getWritingInput().length() > 0) {
             eraseTick++;
             if (eraseTick == 1 || eraseTick > 4) {
@@ -69,6 +68,9 @@ public class ShellUIWrapper extends GuiScreen {
         } else {
             eraseTick = 0;
         }
+
+        // Update theme's 'update()' function
+        Shell._self.getShellUI().getTheme().update();
     }
 
     @Override

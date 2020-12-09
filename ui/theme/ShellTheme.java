@@ -20,6 +20,9 @@ public abstract class ShellTheme {
 	private ArrayList<Tuple<Integer, IUpdatable>> updatableHolder;
 	private ArrayList<Thread> threads;
 
+	/** last key press time **/
+	private long lastKeyPress;
+
 	/**
 	 * if you have custom dragbar's set dragmethod to custom and topBarHeight to 0
 	 * and define your drag area with 'isOverDragArea(mouseX, mouseY)' method
@@ -190,6 +193,19 @@ public abstract class ShellTheme {
 	public boolean isDragging() {
 		return drag;
 	}
+
+	/**
+	 * @return if user is typing on console
+	 */
+	public boolean isTyping() {
+		return System.currentTimeMillis() - lastKeyPress < /* 0.5 seconds */ 300;
+	}
+
+	public void updateKeyPress() {
+		lastKeyPress = System.currentTimeMillis();
+	}
+
+
 
 	public void _mouseRelease(int mouseX, int mouseY, int mouseButton) {
 		drag = false;
