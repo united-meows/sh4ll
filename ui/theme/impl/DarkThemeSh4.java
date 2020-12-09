@@ -28,6 +28,9 @@ public class DarkThemeSh4 extends ShellTheme {
 	private static int DRAGBAR_HEIGHT = 20;
 	private int cursorTicks;
 	private boolean cursorState;
+    private boolean scaling;
+    private Scale side;
+    private int clickedX,clickedY;
 
 	private static Color TRANSPARANT_COLOR = new Color(0,0,0,0);
 
@@ -102,16 +105,59 @@ public class DarkThemeSh4 extends ShellTheme {
 		Color insideColor = cursorState ? TRANSPARANT_COLOR : colors.get("cursor_inside");
 		RenderMethods.drawBorderedRect(6 + shellX + writingWidth, shellY + shellHeight + 5, 10 + shellX + writingWidth, shellY + shellHeight + 14, 0.5F, insideColor.getRGB(), colors.get("cursor_outline").getRGB());
         // ===============================
-
+        if (scaling) {
+            switch (side) {
+                case RIGHT:
+                    Shell._self.values().get("shell_width").setValue(mouseX-shellX);
+                    break;
+                case LEFT:
+                    Shell._self.values().get("shell_x").setValue(mouseX);
+                    Shell._self.values().get("shell_width").setValue(shellX+shellWidth-mouseX);
+                    break;
+                case TOP:
+                    Shell._self.values().get("shell_y").setValue(mouseY);
+                    Shell._self.values().get("shell_height").setValue(shellY+shellHeight-mouseY);
+                    break;
+                case BOTTOM:
+                    Shell._self.values().get("shell_height").setValue(mouseY-shellY-20);
+                    break;
+            }
+        }
 	}
 
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		colors.put("writing", new Color(201, 201, 201));
 		colors.put("background", new Color(0, 0, 0, 230));
+		if (isSidesHovered(mouseX,mouseY)) {
+		    clickedX = mouseX;
+		    clickedY = mouseY;
+            scaling = true;
+        }
 	}
 
-	@Override
+    private boolean isSidesHovered(int mouseX, int mouseY) {
+        int shellX = (int) Shell._self.values().get("shell_x").getValue();
+        int shellY = (int) Shell._self.values().get("shell_y").getValue();
+        int shellWidth = (int) Shell._self.values().get("shell_width").getValue();
+        int shellHeight = (int) Shell._self.values().get("shell_height").getValue();
+	    boolean right = mouseX >= shellX+shellWidth-1 && mouseX <= shellX+shellWidth+1 && mouseY >= shellY && mouseY <= shellY+shellHeight;
+        boolean left = mouseX >= shellX-1 && mouseX <= shellX+1 && mouseY >= shellY && mouseY <= shellY+shellHeight;
+        boolean top = mouseX >= shellX && mouseX <= shellX+shellWidth && mouseY >= shellY-3 && mouseY <= shellY;
+        boolean bottom = mouseX >= shellX && mouseX <= shellX+shellWidth && mouseY >= shellY+shellHeight+19 && mouseY <= shellY+shellHeight+21;
+        if (right)
+            side = Scale.RIGHT;
+        else if (left)
+            side = Scale.LEFT;
+        else if (top)
+            side = Scale.TOP;
+        else if (bottom)
+            side = Scale.BOTTOM;
+
+        return right || left || top || bottom;
+    }
+
+    @Override
 	public void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
 
 	}
@@ -135,6 +181,10 @@ public class DarkThemeSh4 extends ShellTheme {
 
 	@Override
 	public void mouseReleased(int mouseX, int mouseY, int state) {
-
+        scaling = false;
 	}
+
+	public enum Scale {
+	    RIGHT,LEFT,TOP,BOTTOM
+    }
 }
