@@ -26,6 +26,7 @@ public class DarkThemeSh4 extends ShellTheme {
 
 	private HashMap<String, Color> colors;
 	private static int DRAGBAR_HEIGHT = 20;
+	private int cursorTicks;
 
 	public DarkThemeSh4() {
 		super("DarkTheme", DragMethod.TOP, DRAGBAR_HEIGHT);
@@ -76,24 +77,16 @@ public class DarkThemeSh4 extends ShellTheme {
 		int shellY = (int) Shell._self.values().get("shell_y").getValue();
 		int shellWidth = (int) Shell._self.values().get("shell_width").getValue();
 		int shellHeight = (int) Shell._self.values().get("shell_height").getValue();
-		Gui.drawRect(shellX, shellY + DRAGBAR_HEIGHT, shellX + shellWidth, shellY + DRAGBAR_HEIGHT + shellHeight,
-				colors.get("background").getRGB());
+		Gui.drawRect(shellX, shellY + DRAGBAR_HEIGHT, shellX + shellWidth, shellY + DRAGBAR_HEIGHT + shellHeight, colors.get("background").getRGB());
 		GL11.glPushMatrix();
-		RenderMethods.drawRoundedRect(shellX, shellY, shellWidth, DRAGBAR_HEIGHT, 15,
-				colors.get("dragbar").getRGB());
+		RenderMethods.drawRoundedRect(shellX, shellY, shellWidth, DRAGBAR_HEIGHT, 15, colors.get("dragbar").getRGB());
 		GL11.glPopMatrix();
-		biggerFont.drawString(Shell._self.getWritingInput().toString(), shellX + 5, shellY + shellHeight - 10,
-				colors.get("writing").getRGB());
-		biggerFont.drawStringWithShadow(
-				Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@"
-						+ Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase(),
-				shellX + shellWidth / 2
-						- biggerFont.getStringHeight(Shell._self.dynamic().get("client_name").getValue().toString()
-								.toLowerCase() + "@"
-								+ Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase())
-						- 15,
-				shellY + 5, -1);
-
+		biggerFont.drawString(Shell._self.getWritingInput().toString(), shellX + 5, shellY + shellHeight + 8, colors.get("writing").getRGB());
+		biggerFont.drawStringWithShadow(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase(), shellX + shellWidth / 2f - biggerFont.getStringWidth(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase())/2f, shellY + 5, -1);
+        if (cursorTicks>=75)
+            Gui.drawRect(shellX + 5 + biggerFont.getStringWidth(Shell._self.getWritingInput().toString())+1, shellY+shellHeight+6, shellX + 5 + biggerFont.getStringWidth(Shell._self.getWritingInput().toString())+6, shellY+shellHeight+14, colors.get("writing").getRGB());
+        if (cursorTicks--<=0)
+            cursorTicks=150;
 	}
 
 	@Override
