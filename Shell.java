@@ -2,6 +2,8 @@ package sh4ll;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import sh4ll.etc.StateResult;
+import sh4ll.exec.Exec;
 import sh4ll.ui.UIShell;
 import sh4ll.ui.textblock.TextBlock;
 import sh4ll.ui.theme.ShellTheme;
@@ -21,13 +23,12 @@ public class Shell {
     public static Shell _self = new Shell();
     private static boolean DEBUG;
     private ArrayList<TextBlock> outputs;
-
+    private ArrayList<Exec> registeredExecs;
 
     private StringBuilder writingInput;
 
     public void setup(final String clientName, final String userName)
     {
-        writingInput = new StringBuilder();
         setup();
         dynamic().put("client_name", new XValue<String>().setValue(clientName));
         dynamic().put("client_username", new XValue<String>().setValue(userName));
@@ -38,6 +39,8 @@ public class Shell {
     }
 
     public void setup() {
+        writingInput = new StringBuilder();
+        registeredExecs = new ArrayList<>();
         values = new HashMap<>();
         dynamic = new HashMap<>();
         outputs = new ArrayList<>();
@@ -67,8 +70,54 @@ public class Shell {
         dynamic().put("mouse_x", new XValue<Integer>().setValue(1));
         dynamic().put("mouse_y", new XValue<Integer>().setValue(1));
         dynamic().put("open_time", new XValue<Long>().setValue(System.currentTimeMillis()));
+    }
+
+    public byte execute() {
+        final String input = getWritingInput().toString();
+        final String baseCommand = getBaseCommand(input);
 
 
+        /** EXEC CHECK */
+
+        final Exec exec = getExec(baseCommand);
+        if (exec != null) {
+            return exec.runExec(input, split(input));
+        }
+
+        /** ========== **/
+
+        return StateResult.UNKNOWN_EXIT;
+    }
+
+    public String[] split(String input) {
+        return input.contains(" ") ? input.split(" ") : new String[]{input};
+    }
+
+    public String getBaseCommand(String input) {
+        if (input.contains(" ")) {
+            return input.split(" ")[0];
+        }
+        return input;
+    }
+
+    public Exec getExec(Class clazz) {
+        for (Exec exec : Shell._self.getRegisteredExecs()) {
+            if (exec.getClass() == clazz) {
+                return exec;
+            }
+        }
+        return /* Maybe NotFoundExec? */ null;
+    }
+
+    public Exec getExec(String alias) {
+        for (Exec exec : Shell._self.getRegisteredExecs()) {
+            for (String execAlias : exec.getTriggers()) {
+                if (execAlias.equalsIgnoreCase(alias)) {
+                    return exec;
+                }
+            }
+        }
+        return /* Maybe NotFoundExec */ null;
     }
 
     public void open() {
@@ -129,6 +178,7 @@ public class Shell {
         return (int) values().get("shell_height").getValue();
     }
 
+    public void unregisterAllExecs() { registeredExecs.clear(); }
 
     public ArrayList<TextBlock> outputs() {
         return outputs;
@@ -140,5 +190,9 @@ public class Shell {
 
     public StringBuilder getWritingInput() {
         return writingInput;
+    }
+
+    public ArrayList<Exec> getRegisteredExecs() {
+        return registeredExecs;
     }
 }

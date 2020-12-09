@@ -41,7 +41,6 @@ public class UIShell {
                 Shell._self.getWritingInput().delete(0, Shell._self.getWritingInput().length());
             }
         }
-
     }
 
     /** gets current theme */
