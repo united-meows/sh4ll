@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.Gui;
 import sh4ll.Shell;
+import sh4ll.etc.Anchor;
 import sh4ll.etc.IUpdatable;
 import sh4ll.etc.RenderMethods;
 import sh4ll.ui.DragMethod;
@@ -29,7 +30,7 @@ public class DarkThemeSh4 extends ShellTheme {
 	private int cursorTicks;
 	private boolean cursorState;
     private boolean scaling;
-    private Scale side;
+    private Anchor side;
     private int clickedX,clickedY;
 
 	private static Color TRANSPARANT_COLOR = new Color(0,0,0,0);
@@ -106,22 +107,24 @@ public class DarkThemeSh4 extends ShellTheme {
 		RenderMethods.drawBorderedRect(6 + shellX + writingWidth, shellY + shellHeight + 5, 10 + shellX + writingWidth, shellY + shellHeight + 14, 0.5F, insideColor.getRGB(), colors.get("cursor_outline").getRGB());
         // ===============================
         if (scaling) {
-            switch (side) {
-                case RIGHT:
-                    Shell._self.values().get("shell_width").setValue(mouseX-shellX);
-                    break;
-                case LEFT:
-                    Shell._self.values().get("shell_x").setValue(mouseX);
-                    Shell._self.values().get("shell_width").setValue(shellX+shellWidth-mouseX);
-                    break;
-                case TOP:
-                    Shell._self.values().get("shell_y").setValue(mouseY);
-                    Shell._self.values().get("shell_height").setValue(shellY+shellHeight-mouseY);
-                    break;
-                case BOTTOM:
-                    Shell._self.values().get("shell_height").setValue(mouseY-shellY-20);
-                    break;
-            }
+            if (side == Anchor.TOP || side == Anchor.TOP_RIGHT || side == Anchor.TOP_LEFT) {
+				Shell._self.values().get("shell_y").setValue(mouseY);
+				Shell._self.values().get("shell_height").setValue(shellY+shellHeight-mouseY);
+			}
+
+			if (side == Anchor.BOTTOM || side == Anchor.BOTTOM_LEFT || side == Anchor.BOTTOM_RIGHT) {
+				Shell._self.values().get("shell_height").setValue(mouseY-shellY-20);
+			}
+
+			if (side == Anchor.LEFT || side == Anchor.BOTTOM_LEFT || side == Anchor.TOP_LEFT) {
+				Shell._self.values().get("shell_x").setValue(mouseX);
+				Shell._self.values().get("shell_width").setValue(shellX+shellWidth-mouseX);
+			}
+
+			if (side == Anchor.RIGHT || side == Anchor.BOTTOM_RIGHT || side == Anchor.TOP_RIGHT) {
+				Shell._self.values().get("shell_width").setValue(mouseX-shellX);
+			}
+
         }
 	}
 
@@ -137,22 +140,38 @@ public class DarkThemeSh4 extends ShellTheme {
 	}
 
     private boolean isSidesHovered(int mouseX, int mouseY) {
+		int FAIL_RATE = 20;
         int shellX = (int) Shell._self.values().get("shell_x").getValue();
         int shellY = (int) Shell._self.values().get("shell_y").getValue();
         int shellWidth = (int) Shell._self.values().get("shell_width").getValue();
         int shellHeight = (int) Shell._self.values().get("shell_height").getValue();
-	    boolean right = mouseX >= shellX+shellWidth-1 && mouseX <= shellX+shellWidth+1 && mouseY >= shellY && mouseY <= shellY+shellHeight;
-        boolean left = mouseX >= shellX-1 && mouseX <= shellX+1 && mouseY >= shellY && mouseY <= shellY+shellHeight;
-        boolean top = mouseX >= shellX && mouseX <= shellX+shellWidth && mouseY >= shellY-3 && mouseY <= shellY;
-        boolean bottom = mouseX >= shellX && mouseX <= shellX+shellWidth && mouseY >= shellY+shellHeight+19 && mouseY <= shellY+shellHeight+21;
-        if (right)
-            side = Scale.RIGHT;
-        else if (left)
-            side = Scale.LEFT;
-        else if (top)
-            side = Scale.TOP;
-        else if (bottom)
-            side = Scale.BOTTOM;
+	    boolean right = mouseX >= shellX+shellWidth-3 && mouseX <= shellX+shellWidth+1 && mouseY + FAIL_RATE >= shellY && mouseY <= shellY+shellHeight + FAIL_RATE;
+        boolean left = mouseX >= shellX-1 && mouseX <= shellX+1 && mouseY + FAIL_RATE >= shellY && mouseY <= shellY+shellHeight + FAIL_RATE;
+        boolean top = mouseX + FAIL_RATE >= shellX && mouseX <= shellX+shellWidth + FAIL_RATE && mouseY >= shellY-3 && mouseY <= shellY + 3;
+        boolean bottom = mouseX >= shellX && mouseX <= shellX+shellWidth && mouseY + FAIL_RATE >= shellY+shellHeight+19 && mouseY <= shellY+shellHeight+24 + FAIL_RATE;
+
+    	if (right) {
+    		if (top) {
+    			side = Anchor.TOP_RIGHT;
+			} else if (bottom) {
+				side = Anchor.BOTTOM_RIGHT;
+			} else {
+    			side = Anchor.RIGHT;
+			}
+		}
+    	else if (left) {
+			if (top) {
+				side = Anchor.TOP_LEFT;
+			} else if (bottom) {
+				side = Anchor.BOTTOM_LEFT;
+			} else {
+				side = Anchor.LEFT;
+			}
+		} else if (top) {
+    		side = Anchor.TOP;
+		} else if (bottom) {
+    		side = Anchor.BOTTOM;
+		}
 
         return right || left || top || bottom;
     }
@@ -184,7 +203,4 @@ public class DarkThemeSh4 extends ShellTheme {
         scaling = false;
 	}
 
-	public enum Scale {
-	    RIGHT,LEFT,TOP,BOTTOM
-    }
 }

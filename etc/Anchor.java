@@ -7,5 +7,6 @@ public enum Anchor {
     BOTTOM,
     BOTTOM_RIGHT,
     RIGHT,
-    TOP_RIGHT
+    TOP_RIGHT,
+    TOP
 }
