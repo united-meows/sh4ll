@@ -32,16 +32,17 @@ public class DarkThemeSh4 extends ShellTheme {
 		super("DarkTheme", DragMethod.TOP, DRAGBAR_HEIGHT);
 		colors = new HashMap<>();
 		colors.put("background", new Color(0, 0, 0, 255));
-		colors.put("writing", new Color(255, 255, 255));
-		 colors.put("dragbar", new Color(57, 56, 56));
+		colors.put("writing", new Color(255, 254, 254));
+		colors.put("dragbar", new Color(255, 255, 255));
+		colors.put("owner", new Color(56, 56, 56));
 		opacity = 255;
 	}
 
 	@Override
 	public void setup() {
-		fontRenderer = new MinecraftFontRenderer(new Font("Consolas", Font.PLAIN, 16), true, false);
-		biggerFont = new MinecraftFontRenderer(new Font("Consolas", Font.PLAIN, 20), true, false);
-		titleFont = new MinecraftFontRenderer(new Font("Consolas", Font.PLAIN, 40), true, false);
+		fontRenderer = new MinecraftFontRenderer(new Font("Courier", Font.PLAIN, 16), true, false);
+		biggerFont = new MinecraftFontRenderer(new Font("Courier", Font.PLAIN, 16), true, false);
+		titleFont = new MinecraftFontRenderer(new Font("Courier", Font.BOLD, 14), true, false);
 		Shell._self.values().put("shell_anim_x",
 				new XValue().setValue((int) Shell._self.values().get("shell_x").getValue()));
 		Shell._self.values().put("shell_anim_y",
@@ -82,7 +83,7 @@ public class DarkThemeSh4 extends ShellTheme {
 		RenderMethods.drawRoundedRect(shellX, shellY, shellWidth, DRAGBAR_HEIGHT, 15, colors.get("dragbar").getRGB());
 		GL11.glPopMatrix();
 		biggerFont.drawString(Shell._self.getWritingInput().toString(), shellX + 5, shellY + shellHeight + 8, colors.get("writing").getRGB());
-		biggerFont.drawStringWithShadow(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase(), shellX + shellWidth / 2f - biggerFont.getStringWidth(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase())/2f, shellY + 5, -1);
+		titleFont.drawString(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase(), shellX + shellWidth / 2f - titleFont.getStringWidth(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase())/2f, shellY + 7, colors.get("owner").getRGB());
         if (cursorTicks>=75)
             Gui.drawRect(shellX + 5 + biggerFont.getStringWidth(Shell._self.getWritingInput().toString())+1, shellY+shellHeight+6, shellX + 5 + biggerFont.getStringWidth(Shell._self.getWritingInput().toString())+6, shellY+shellHeight+14, colors.get("writing").getRGB());
         if (cursorTicks--<=0)
@@ -92,6 +93,7 @@ public class DarkThemeSh4 extends ShellTheme {
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		colors.put("writing", new Color(201, 201, 201));
+		colors.put("background", new Color(0, 0, 0, 200));
 	}
 
 	@Override
