@@ -93,6 +93,10 @@ public class Shell {
         return StateResult.UNKNOWN_EXIT;
     }
 
+    public void writeLine(TextBlock block) {
+        outputs().add(block);
+    }
+
     public String[] split(String input) {
         return input.contains(" ") ? input.split(" ") : new String[]{input};
     }

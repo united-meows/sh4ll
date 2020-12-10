@@ -9,6 +9,7 @@ import sh4ll.etc.IUpdatable;
 import sh4ll.etc.Tuple;
 import sh4ll.ui.DragMethod;
 import sh4ll.ui.textblock.TextBlock;
+import sh4ll.util.MinecraftFontRenderer;
 import sh4ll.value.XValue;
 
 public abstract class ShellTheme {
@@ -177,7 +178,7 @@ public abstract class ShellTheme {
 	public abstract void update();
 
 
-	public List<TextBlock> getRenderBlocks(int height) {
+	public List<TextBlock> getRenderBlocks(int height, MinecraftFontRenderer fontRenderer) {
 		List<TextBlock> blocks = new ArrayList<>();
 		int currentHeight = 0;
 		int totalHeight = 0;
@@ -190,13 +191,12 @@ public abstract class ShellTheme {
 			}
 
 			/* adds textblocks height */
-			currentHeight += textBlock.getTextLength().getSecond().getSecond();
+			currentHeight += textBlock.getTextLength(fontRenderer).getSecond().getSecond();
 		}
 
 		return blocks;
 	}
 
-	public void
 
 
 	public void _clickDrag(int mouseX, int mouseY) {
