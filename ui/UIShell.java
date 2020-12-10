@@ -27,18 +27,18 @@ public class UIShell {
         theme.onDisable();
     }
 
-
+    // ipana abi nolur yorum satiri koy
     public void keyTyped(char typedChar, int keyCode) {
 
         // Update last key press time
         getTheme().updateKeyPress();
-        if (keyCode == Keyboard.KEY_LEFT) {
-            if (cursorPos > 0)
-                cursorPos--;
-        } else if (keyCode == Keyboard.KEY_RIGHT) {
-            if (cursorPos < Shell._self.getWritingInput().toString().length())
-                cursorPos++;
-        }
+//        if (keyCode == Keyboard.KEY_LEFT) {
+//            if (cursorPos > 0)
+//                cursorPos--;
+//        } else if (keyCode == Keyboard.KEY_RIGHT) {
+////            if (cursorPos < Shell._self.getWritingInput().toString().length())
+////                cursorPos++;
+//        }
         if (ALLOWED_CHARS.contains(String.valueOf(typedChar))) {
             if (cursorPos == Shell._self.getWritingInput().toString().length()) {
                 Shell._self.getWritingInput().append(typedChar);
@@ -71,8 +71,20 @@ public class UIShell {
         return cursorPos;
     }
 
+    public void incrementCursorPos() {
+        cursorPos++;
+    }
+
+    public void decreaseCursorPos(){
+        cursorPos--;
+    }
+
     public void setCursorPos(int cursorPos) {
         this.cursorPos = cursorPos;
+    }
+
+    public boolean isCursorAtLastChar() {
+        return cursorPos == Shell._self.getWritingInput().length();
     }
 
     public void setTheme(ShellTheme newTheme) {

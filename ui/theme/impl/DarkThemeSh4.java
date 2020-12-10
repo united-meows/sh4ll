@@ -119,11 +119,11 @@ public class DarkThemeSh4 extends ShellTheme {
 
      	// CURSOR (POINTER) CODE
 		// ===============================
-		Color insideColor = cursorState ? TRANSPARANT_COLOR : colors.get("cursor_inside");
-
+		Color insideColor =  cursorState && Shell._self.getShellUI().isCursorAtLastChar() ? colors.get("cursor_inside") : TRANSPARANT_COLOR;
         int cursorPos = Shell._self.getShellUI().getCursorPos();
-        int cursorX = (int) (writingWidth/Math.max(1,Shell._self.getWritingInput().toString().length())*cursorPos);
-		RenderMethods.drawBorderedRect(5 + shellX + cursorX, shellY + shellHeight + 5.5f, 10 + shellX + cursorX, shellY + shellHeight + 14, 0.5F, insideColor.getRGB(), colors.get("cursor_outline").getRGB());
+        int cursorX = cursorPos == 0 ? 0 : titleFont.getStringWidth(Shell._self.getWritingInput().substring(0, cursorPos));
+        RenderMethods.drawBorderedRect(5 + shellX + cursorX, shellY + shellHeight +
+				5.5f, 10 + shellX + cursorX, shellY + shellHeight + 14, 0.5F, insideColor.getRGB(), colors.get("cursor_outline").getRGB());
         // ===============================
 
 		// SCALING CODE

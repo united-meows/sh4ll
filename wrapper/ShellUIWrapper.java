@@ -1,13 +1,44 @@
 package sh4ll.wrapper;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.gui.GuiScreen;
 import sh4ll.Shell;
+import sh4ll.etc.RepeatableKey;
 
 public class ShellUIWrapper extends GuiScreen {
+
+    private ArrayList<RepeatableKey> repeatableKeys;
+
+    public ShellUIWrapper() {
+        repeatableKeys = new ArrayList<>();
+        repeatableKeys.add(new RepeatableKey(Keyboard.KEY_BACK) {
+            @Override
+            public void action() {
+                if (Shell._self.getWritingInput().length() > 0) {
+                    Shell._self.getWritingInput().deleteCharAt(Math.max(0, Shell._self.getShellUI().getCursorPos() - 1));
+                    Shell._self.getShellUI().setCursorPos(Shell._self.getShellUI().getCursorPos() - 1);
+                }
+            }
+        });
+        repeatableKeys.add(new RepeatableKey(Keyboard.KEY_RIGHT) {
+            @Override
+            public void action() {
+                if (Shell._self.getShellUI().getCursorPos() < Shell._self.getWritingInput().toString().length())
+                    Shell._self.getShellUI().incrementCursorPos();
+            }
+        });
+        repeatableKeys.add(new RepeatableKey(Keyboard.KEY_LEFT) {
+            @Override
+            public void action() {
+                if (Shell._self.getShellUI().getCursorPos() > 0)
+                    Shell._self.getShellUI().decreaseCursorPos();
+            }
+        });
+    }
 
     @Override
     public void onGuiClosed() {
@@ -53,25 +84,28 @@ public class ShellUIWrapper extends GuiScreen {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         Shell._self.getShellUI().keyTyped(typedChar, keyCode);
+
+
+        //TODO: Check later cursor pos
+        Shell._self.getShellUI().setCursorPos(Math.min(Shell._self.getShellUI().getCursorPos(),Shell._self.getWritingInput().toString().length()));
+        Shell._self.getShellUI().setCursorPos(Math.max(Shell._self.getShellUI().getCursorPos(),0));
+
         if (keyCode == Keyboard.KEY_ESCAPE) {
             super.keyTyped(typedChar, keyCode);
         }
+
+
     }
 
     @Override
     public void updateScreen() {
-        Shell._self.getShellUI().setCursorPos(Math.min(Shell._self.getShellUI().getCursorPos(),Shell._self.getWritingInput().toString().length()));
-        Shell._self.getShellUI().setCursorPos(Math.max(Shell._self.getShellUI().getCursorPos(),0));
-        if (Keyboard.isKeyDown(Keyboard.KEY_BACK) && Shell._self.getWritingInput().length() > 0) {
-            eraseTick++;
-            if (eraseTick == 1 || eraseTick > 4) {
-                Shell._self.getWritingInput().deleteCharAt(Math.max(0,Shell._self.getShellUI().getCursorPos()-1));
-                Shell._self.getShellUI().setCursorPos(Shell._self.getShellUI().getCursorPos()-1);
-            }
-        } else {
-            eraseTick = 0;
-        }
 
+        for (RepeatableKey repeatableKey : repeatableKeys) {
+            repeatableKey.setPressed(Keyboard.isKeyDown(repeatableKey.getKeyCode()));
+            if (repeatableKey.isPressed()) {
+                repeatableKey.update();
+            }
+        }
         // Update theme's 'update()' function
         Shell._self.getShellUI().getTheme().update();
     }
