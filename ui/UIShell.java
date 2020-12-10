@@ -13,6 +13,7 @@ public class UIShell {
 
     private ShellTheme theme;
     private ShellUIWrapper wrapper;
+    private int cursorPos;
 
     public void onOpen() {
         if (wrapper == null) {
@@ -31,13 +32,31 @@ public class UIShell {
 
         // Update last key press time
         getTheme().updateKeyPress();
+        if (keyCode == Keyboard.KEY_LEFT) {
+            if (cursorPos > 0)
+                cursorPos--;
+        } else if (keyCode == Keyboard.KEY_RIGHT) {
+            if (cursorPos < Shell._self.getWritingInput().toString().length())
+                cursorPos++;
+        }
         if (ALLOWED_CHARS.contains(String.valueOf(typedChar))) {
-            Shell._self.getWritingInput().append(typedChar);
+            if (cursorPos == Shell._self.getWritingInput().toString().length()) {
+                Shell._self.getWritingInput().append(typedChar);
+
+            } else {
+                String str = Shell._self.getWritingInput().toString();
+                Shell._self.getWritingInput().delete(0, Shell._self.getWritingInput().length());
+                Shell._self.getWritingInput().append(str, 0, cursorPos);
+                Shell._self.getWritingInput().append(typedChar);
+                Shell._self.getWritingInput().append(str, cursorPos, str.length());
+            }
+            cursorPos++;
             return;
         }
 
         if (Shell._self.getWritingInput().length() > 0) {
-            if (keyCode == Keyboard.KEY_RETURN) {         	
+            if (keyCode == Keyboard.KEY_RETURN) {
+                cursorPos=0;
                 Shell._self.getWritingInput().delete(0, Shell._self.getWritingInput().length());
             }
         }
@@ -46,6 +65,14 @@ public class UIShell {
     /** gets current theme */
     public ShellTheme getTheme() {
         return theme;
+    }
+
+    public int getCursorPos() {
+        return cursorPos;
+    }
+
+    public void setCursorPos(int cursorPos) {
+        this.cursorPos = cursorPos;
     }
 
     public void setTheme(ShellTheme newTheme) {

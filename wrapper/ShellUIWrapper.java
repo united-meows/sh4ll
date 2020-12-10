@@ -60,10 +60,13 @@ public class ShellUIWrapper extends GuiScreen {
 
     @Override
     public void updateScreen() {
+        Shell._self.getShellUI().setCursorPos(Math.min(Shell._self.getShellUI().getCursorPos(),Shell._self.getWritingInput().toString().length()));
+        Shell._self.getShellUI().setCursorPos(Math.max(Shell._self.getShellUI().getCursorPos(),0));
         if (Keyboard.isKeyDown(Keyboard.KEY_BACK) && Shell._self.getWritingInput().length() > 0) {
             eraseTick++;
             if (eraseTick == 1 || eraseTick > 4) {
-                Shell._self.getWritingInput().deleteCharAt(Shell._self.getWritingInput().length() - 1);
+                Shell._self.getWritingInput().deleteCharAt(Math.max(0,Shell._self.getShellUI().getCursorPos()-1));
+                Shell._self.getShellUI().setCursorPos(Shell._self.getShellUI().getCursorPos()-1);
             }
         } else {
             eraseTick = 0;
@@ -78,4 +81,8 @@ public class ShellUIWrapper extends GuiScreen {
 
     }
 
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
+    }
 }

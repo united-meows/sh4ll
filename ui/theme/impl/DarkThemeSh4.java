@@ -120,7 +120,10 @@ public class DarkThemeSh4 extends ShellTheme {
      	// CURSOR (POINTER) CODE
 		// ===============================
 		Color insideColor = cursorState ? TRANSPARANT_COLOR : colors.get("cursor_inside");
-		RenderMethods.drawBorderedRect(6 + shellX + writingWidth, shellY + shellHeight + 5, 10 + shellX + writingWidth, shellY + shellHeight + 14, 0.5F, insideColor.getRGB(), colors.get("cursor_outline").getRGB());
+
+        int cursorPos = Shell._self.getShellUI().getCursorPos();
+        int cursorX = (int) (writingWidth/Math.max(1,Shell._self.getWritingInput().toString().length())*cursorPos);
+		RenderMethods.drawBorderedRect(5 + shellX + cursorX, shellY + shellHeight + 5.5f, 10 + shellX + cursorX, shellY + shellHeight + 14, 0.5F, insideColor.getRGB(), colors.get("cursor_outline").getRGB());
         // ===============================
 
 		// SCALING CODE
@@ -193,6 +196,8 @@ public class DarkThemeSh4 extends ShellTheme {
 
         return right || left || top || bottom;
     }
+
+
 
     @Override
 	public void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
