@@ -7,7 +7,7 @@ import sh4ll.util.MinecraftFontRenderer;
 public abstract class TextBlock {
 
     private String text;
-        private MinecraftFontRenderer fontRenderer;
+    private MinecraftFontRenderer fontRenderer;
 
     public TextBlock(String _text, MinecraftFontRenderer _fontRenderer) {
         text = _text;

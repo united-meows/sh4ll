@@ -32,11 +32,11 @@ public class DarkThemeSh4 extends ShellTheme {
 	private static int DRAGBAR_HEIGHT = 20;
 	private int cursorTicks;
 	private boolean cursorState;
-    private boolean scaling;
-    private Anchor side;
-    private int clickedX,clickedY;
+	private boolean scaling;
+	private Anchor side;
+	private int clickedX, clickedY;
 
-	private static Color TRANSPARANT_COLOR = new Color(0,0,0,0);
+	private static Color TRANSPARANT_COLOR = new Color(0, 0, 0, 0);
 
 	public DarkThemeSh4() {
 		super("DarkTheme", DragMethod.TOP, DRAGBAR_HEIGHT);
@@ -46,7 +46,6 @@ public class DarkThemeSh4 extends ShellTheme {
 		colors.put("dragbar_start", new Color(255, 255, 255));
 		colors.put("dragbar_end", new Color(220, 218, 218));
 		colors.put("owner", new Color(56, 56, 56));
-
 
 
 		colors.put("cursor_outline", new Color(87, 85, 85, 255));
@@ -105,7 +104,7 @@ public class DarkThemeSh4 extends ShellTheme {
 		RenderMethods.drawGradientRect(shellX, shellY, shellX + shellWidth, shellY + DRAGBAR_HEIGHT, colors.get("dragbar_start").getRGB(), colors.get("dragbar_end").getRGB());
 		GL11.glPopMatrix();
 		titleFont.drawString(Shell._self.getWritingInput().toString(), shellX + 5, shellY + shellHeight + 8, colors.get("writing").getRGB());
-		titleFont.drawString(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase(), shellX + shellWidth / 2f - titleFont.getStringWidth(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase())/2f, shellY + 8, colors.get("owner").getRGB());
+		titleFont.drawString(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase(), shellX + shellWidth / 2f - titleFont.getStringWidth(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase()) / 2f, shellY + 8, colors.get("owner").getRGB());
 
 
 		final float writingWidth = titleFont.getStringWidth(Shell._self.getWritingInput().toString());
@@ -116,71 +115,69 @@ public class DarkThemeSh4 extends ShellTheme {
 		// ==============================
 
 
-
-     	// CURSOR (POINTER) CODE
+		// CURSOR (POINTER) CODE
 		// ===============================
-		Color insideColor =  cursorState && Shell._self.getShellUI().isCursorAtLastChar() ? colors.get("cursor_inside") : TRANSPARANT_COLOR;
-        int cursorPos = Shell._self.getShellUI().getCursorPos();
-        int cursorX = cursorPos == 0 ? 0 : titleFont.getStringWidth(Shell._self.getWritingInput().substring(0, cursorPos));
-        RenderMethods.drawBorderedRect(5 + shellX + cursorX, shellY + shellHeight +
+		Color insideColor = cursorState && Shell._self.getShellUI().isCursorAtLastChar() ? colors.get("cursor_inside") : TRANSPARANT_COLOR;
+		int cursorPos = Shell._self.getShellUI().getCursorPos();
+		int cursorX = cursorPos == 0 ? 0 : titleFont.getStringWidth(Shell._self.getWritingInput().substring(0, cursorPos));
+		RenderMethods.drawBorderedRect(5 + shellX + cursorX, shellY + shellHeight +
 				5.5f, 10 + shellX + cursorX, shellY + shellHeight + 14, 0.5F, insideColor.getRGB(), colors.get("cursor_outline").getRGB());
-        // ===============================
+		// ===============================
 
 		// SCALING CODE
 		// ===============================
-        if (scaling) {
-            if (side == Anchor.TOP || side == Anchor.TOP_RIGHT || side == Anchor.TOP_LEFT) {
+		if (scaling) {
+			if (side == Anchor.TOP || side == Anchor.TOP_RIGHT || side == Anchor.TOP_LEFT) {
 				Shell._self.values().get("shell_y").setValue(mouseY);
-				Shell._self.values().get("shell_height").setValue(shellY+shellHeight-mouseY);
+				Shell._self.values().get("shell_height").setValue(shellY + shellHeight - mouseY);
 			}
 
 			if (side == Anchor.BOTTOM || side == Anchor.BOTTOM_LEFT || side == Anchor.BOTTOM_RIGHT) {
-				Shell._self.values().get("shell_height").setValue(mouseY-shellY-20);
+				Shell._self.values().get("shell_height").setValue(mouseY - shellY - 20);
 			}
 
 			if (side == Anchor.LEFT || side == Anchor.BOTTOM_LEFT || side == Anchor.TOP_LEFT) {
 				Shell._self.values().get("shell_x").setValue(mouseX);
-				Shell._self.values().get("shell_width").setValue(shellX+shellWidth-mouseX);
+				Shell._self.values().get("shell_width").setValue(shellX + shellWidth - mouseX);
 			}
 
 			if (side == Anchor.RIGHT || side == Anchor.BOTTOM_RIGHT || side == Anchor.TOP_RIGHT) {
-				Shell._self.values().get("shell_width").setValue(mouseX-shellX);
+				Shell._self.values().get("shell_width").setValue(mouseX - shellX);
 			}
-        }
+		}
 		// ===============================
 	}
 
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		colors.put("writing", new Color(201, 201, 201));
-		if (isSidesHovered(mouseX,mouseY)) {
-		    clickedX = mouseX;
-		    clickedY = mouseY;
-            scaling = true;
-        }
+		if (isSidesHovered(mouseX, mouseY)) {
+			clickedX = mouseX;
+			clickedY = mouseY;
+			scaling = true;
+		}
 	}
 
-    private boolean isSidesHovered(int mouseX, int mouseY) {
+	private boolean isSidesHovered(int mouseX, int mouseY) {
 		int FAIL_RATE = 20;
-        int shellX = (int) Shell._self.values().get("shell_x").getValue();
-        int shellY = (int) Shell._self.values().get("shell_y").getValue();
-        int shellWidth = (int) Shell._self.values().get("shell_width").getValue();
-        int shellHeight = (int) Shell._self.values().get("shell_height").getValue();
-	    boolean right = mouseX >= shellX+shellWidth-3 && mouseX <= shellX+shellWidth+1 && mouseY + FAIL_RATE >= shellY && mouseY <= shellY+shellHeight + FAIL_RATE;
-        boolean left = mouseX >= shellX-1 && mouseX <= shellX+1 && mouseY + FAIL_RATE >= shellY && mouseY <= shellY+shellHeight + FAIL_RATE;
-        boolean top = mouseX + FAIL_RATE >= shellX && mouseX <= shellX+shellWidth + FAIL_RATE && mouseY >= shellY-3 && mouseY <= shellY + 3;
-        boolean bottom = mouseX >= shellX && mouseX <= shellX+shellWidth && mouseY + FAIL_RATE >= shellY+shellHeight+19 && mouseY <= shellY+shellHeight+24 + FAIL_RATE;
+		int shellX = (int) Shell._self.values().get("shell_x").getValue();
+		int shellY = (int) Shell._self.values().get("shell_y").getValue();
+		int shellWidth = (int) Shell._self.values().get("shell_width").getValue();
+		int shellHeight = (int) Shell._self.values().get("shell_height").getValue();
+		boolean right = mouseX >= shellX + shellWidth - 3 && mouseX <= shellX + shellWidth + 1 && mouseY + FAIL_RATE >= shellY && mouseY <= shellY + shellHeight + FAIL_RATE;
+		boolean left = mouseX >= shellX - 1 && mouseX <= shellX + 1 && mouseY + FAIL_RATE >= shellY && mouseY <= shellY + shellHeight + FAIL_RATE;
+		boolean top = mouseX + FAIL_RATE >= shellX && mouseX <= shellX + shellWidth + FAIL_RATE && mouseY >= shellY - 3 && mouseY <= shellY + 3;
+		boolean bottom = mouseX >= shellX && mouseX <= shellX + shellWidth && mouseY + FAIL_RATE >= shellY + shellHeight + 19 && mouseY <= shellY + shellHeight + 24 + FAIL_RATE;
 
-    	if (right) {
-    		if (top) {
-    			side = Anchor.TOP_RIGHT;
+		if (right) {
+			if (top) {
+				side = Anchor.TOP_RIGHT;
 			} else if (bottom) {
 				side = Anchor.BOTTOM_RIGHT;
 			} else {
-    			side = Anchor.RIGHT;
+				side = Anchor.RIGHT;
 			}
-		}
-    	else if (left) {
+		} else if (left) {
 			if (top) {
 				side = Anchor.TOP_LEFT;
 			} else if (bottom) {
@@ -189,17 +186,16 @@ public class DarkThemeSh4 extends ShellTheme {
 				side = Anchor.LEFT;
 			}
 		} else if (top) {
-    		side = Anchor.TOP;
+			side = Anchor.TOP;
 		} else if (bottom) {
-    		side = Anchor.BOTTOM;
+			side = Anchor.BOTTOM;
 		}
 
-        return right || left || top || bottom;
-    }
+		return right || left || top || bottom;
+	}
 
 
-
-    @Override
+	@Override
 	public void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
 
 	}
@@ -207,7 +203,9 @@ public class DarkThemeSh4 extends ShellTheme {
 	@Override
 	public void update() {
 		// increment cursor tick
-		if (++cursorTicks >= 201) { cursorTicks = 0; }
+		if (++cursorTicks >= 201) {
+			cursorTicks = 0;
+		}
 
 		// cursor state change
 		if (isTyping()) {
@@ -223,7 +221,7 @@ public class DarkThemeSh4 extends ShellTheme {
 
 	@Override
 	public void mouseReleased(int mouseX, int mouseY, int state) {
-        scaling = false;
+		scaling = false;
 	}
 
 

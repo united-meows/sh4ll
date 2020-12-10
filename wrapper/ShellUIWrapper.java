@@ -27,7 +27,7 @@ public class ShellUIWrapper extends GuiScreen {
         repeatableKeys.add(new RepeatableKey(Keyboard.KEY_RIGHT) {
             @Override
             public void action() {
-                if (Shell._self.getShellUI().getCursorPos() < Shell._self.getWritingInput().toString().length())
+                if (Shell._self.getShellUI().getCursorPos() < Shell._self.getWritingInput().length())
                     Shell._self.getShellUI().incrementCursorPos();
             }
         });
