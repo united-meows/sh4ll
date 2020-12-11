@@ -6,7 +6,13 @@ import sh4ll.util.MinecraftFontRenderer;
 
 public class SelectableTextBlock  extends TextBlock {
     private double x,y,width,height;
+    /**
+     * Selected first and Last word of the parent
+     */
     private String first,last;
+    /**
+     * Selected first and Last word index of the parent
+     */
     private int firstIndex,lastIndex;
 
     public SelectableTextBlock(String _text) {
