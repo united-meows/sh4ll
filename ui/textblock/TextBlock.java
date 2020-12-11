@@ -32,4 +32,5 @@ public abstract class TextBlock {
     protected MinecraftFontRenderer getFontRenderer() {
         return fontRenderer;
     }
+
 }

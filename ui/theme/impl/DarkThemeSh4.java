@@ -12,6 +12,7 @@ import sh4ll.Shell;
 import sh4ll.etc.Anchor;
 import sh4ll.etc.IUpdatable;
 import sh4ll.etc.RenderMethods;
+import sh4ll.etc.Tuple;
 import sh4ll.ui.DragMethod;
 import sh4ll.ui.textblock.TextBlock;
 import sh4ll.ui.textblock.def.SelectableTextBlock;
@@ -35,7 +36,7 @@ public class DarkThemeSh4 extends ShellTheme {
 	private Anchor side;
 	private int clickedX, clickedY;
 	private TextBlock clickedTextBlock;
-	private SelectableTextBlock selectedTextBlock = new SelectableTextBlock();
+	private SelectableTextBlock selectedTextBlock = new SelectableTextBlock(false);
 
 	private static Color TRANSPARANT_COLOR = new Color(0, 0, 0, 0);
 
@@ -47,6 +48,7 @@ public class DarkThemeSh4 extends ShellTheme {
 		colors.put("dragbar_start", new Color(255, 255, 255));
 		colors.put("dragbar_end", new Color(220, 218, 218));
 		colors.put("owner", new Color(56, 56, 56));
+		colors.put("output_text", new Color(255, 255, 255));
 
 
 		colors.put("cursor_outline", new Color(87, 85, 85, 255));
@@ -104,11 +106,10 @@ public class DarkThemeSh4 extends ShellTheme {
 		GL11.glPushMatrix();
 		RenderMethods.drawGradientRect(shellX, shellY, shellX + shellWidth, shellY + DRAGBAR_HEIGHT, colors.get("dragbar_start").getRGB(), colors.get("dragbar_end").getRGB());
 		GL11.glPopMatrix();
-		titleFont.drawString(Shell._self.getWritingInput().toString(), shellX + 5, shellY + shellHeight + 8, colors.get("writing").getRGB());
+		titleFont.drawString( "§d" + Shell._self.getShellUI().getCustomUserAlias() + "§5 ~ §f" + Shell._self.getWritingInput().toString(), shellX + 5, shellY + shellHeight + 8, colors.get("writing").getRGB());
 		titleFont.drawString(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase(), (float) (shellX + shellWidth / 2f - titleFont.getStringWidth(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase()) / 2f), shellY + 8, colors.get("owner").getRGB());
 
 
-		final float writingWidth = (float) titleFont.getStringWidth(Shell._self.getWritingInput().toString());
 
 		// TEXT BLOCKS CODE
 		// ==============================
@@ -122,7 +123,8 @@ public class DarkThemeSh4 extends ShellTheme {
                 titleFont.drawString(selectedTextBlock.getText(),2,2, colors.get("owner").getRGB());
                 Gui.drawRect((int)selectedTextBlock.getX(), (int)selectedTextBlock.getY(), (int)selectedTextBlock.getWidth(), (int)selectedTextBlock.getHeight(), new Color(255, 2, 2,100).getRGB());
             }
-            for (TextBlock textBlock : Shell._self.outputs()) {
+			for (Tuple<TextBlock, Boolean> textBlockVal : Shell._self.outputs()) {
+				final TextBlock textBlock = textBlockVal.getFirst();
                 if (y >= shellY + DRAGBAR_HEIGHT + 5) {
                     if (clickedTextBlock == textBlock && selectedTextBlock != null) {
                         String[] split = textBlock.getText().split("");
@@ -149,9 +151,11 @@ public class DarkThemeSh4 extends ShellTheme {
                             x+=titleFont.getStringWidth(str);
                         }
                     }
-                    titleFont.drawString(textBlock.getText(), shellX + 5, y, colors.get("writing").getRGB());
+                    titleFont.drawString(textBlock.getText(), shellX + 5, y, colors.get("output_text").getRGB());
                 }
-                y += 14;
+                if (textBlockVal.getSecond()) {
+                    y += 10;
+                }
             }
         }
 		// ==============================
@@ -160,7 +164,7 @@ public class DarkThemeSh4 extends ShellTheme {
 		// ===============================
 		Color insideColor = cursorState && Shell._self.getShellUI().isCursorAtLastChar() ? colors.get("cursor_inside") : TRANSPARANT_COLOR;
 		int cursorPos = Shell._self.getShellUI().getCursorPos();
-		int cursorX = cursorPos == 0 ? 0 : (int) titleFont.getStringWidth(Shell._self.getWritingInput().substring(0, cursorPos));
+		int cursorX = (int)titleFont.getStringWidth(Shell._self.getShellUI().getCustomUserAlias()) + 9 + (cursorPos == 0 ? 0 : (int) titleFont.getStringWidth(Shell._self.getWritingInput().substring(0, cursorPos)));
 		RenderMethods.drawBorderedRect(5 + shellX + cursorX, shellY + shellHeight +
 				5.5f, 10 + shellX + cursorX, shellY + shellHeight + 14, 0.5F, insideColor.getRGB(), colors.get("cursor_outline").getRGB());
 		// ===============================
@@ -200,7 +204,8 @@ public class DarkThemeSh4 extends ShellTheme {
             int y = (Shell._self.outputs().size()*14 + shellY + DRAGBAR_HEIGHT + 5 > shellY + DRAGBAR_HEIGHT + shellHeight ?
                     (shellY + DRAGBAR_HEIGHT + 5) - ((14*(Shell._self.outputs().size()-outOfBounds))) :
                     shellY + DRAGBAR_HEIGHT + 5);
-            for (TextBlock textBlock : Shell._self.outputs()) {
+            for (Tuple<TextBlock, Boolean> textBlockVal : Shell._self.outputs()) {
+            	final TextBlock textBlock = textBlockVal.getFirst();
                 if (y >= shellY + DRAGBAR_HEIGHT + 5) {
                     System.out.println(mouseX+" : "+(shellX+5+titleFont.getStringWidth(textBlock.getText())));
                     if (mouseX >= shellX+5 && mouseX <= shellX+5+titleFont.getStringWidth(textBlock.getText()) && mouseY >= y-2 && mouseY <= y+6) {
@@ -209,7 +214,8 @@ public class DarkThemeSh4 extends ShellTheme {
                         clickedTextBlock = textBlock;
                     }
                 }
-                y += 14;
+                if (textBlockVal.getSecond())
+              	  y += 10;
             }
         }
 		if (isSidesHovered(mouseX, mouseY)) {

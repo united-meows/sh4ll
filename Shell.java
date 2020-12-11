@@ -3,6 +3,7 @@ package sh4ll;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import sh4ll.etc.StateResult;
+import sh4ll.etc.Tuple;
 import sh4ll.exec.Exec;
 import sh4ll.ui.UIShell;
 import sh4ll.ui.textblock.TextBlock;
@@ -22,7 +23,7 @@ public class Shell {
     private HashMap<String, XValue> dynamic;
     public static Shell _self = new Shell();
     private static boolean DEBUG;
-    private ArrayList<TextBlock> outputs;
+    private ArrayList<Tuple<TextBlock, Boolean>> outputs;
     private ArrayList<Exec> registeredExecs;
 
     private StringBuilder writingInput;
@@ -93,8 +94,11 @@ public class Shell {
         return StateResult.UNKNOWN_EXIT;
     }
 
-    public void writeLine(TextBlock block) {
-        outputs().add(block);
+    public void write(final TextBlock block) {
+        outputs().add(new Tuple<TextBlock, Boolean>(block, false));
+    }
+    public void writeLine(final TextBlock block) {
+        outputs().add(new Tuple<TextBlock, Boolean>(block, true));
     }
 
     public String[] split(String input) {
@@ -157,6 +161,8 @@ public class Shell {
         opened = false;
         shellUI.onClose();
     }
+    
+
 
     public boolean isOpen() {
         return opened;
@@ -188,7 +194,7 @@ public class Shell {
 
     public void unregisterAllExecs() { registeredExecs.clear(); }
 
-    public ArrayList<TextBlock> outputs() {
+    public ArrayList<Tuple<TextBlock, Boolean>> outputs() {
         return outputs;
     }
 

@@ -18,7 +18,7 @@ public class SelectableTextBlock  extends TextBlock {
     public SelectableTextBlock(String _text) {
         super(_text, null);
     }
-    public SelectableTextBlock() {
+    public SelectableTextBlock(boolean newLine) {
         super("", null);
     }
     @Override

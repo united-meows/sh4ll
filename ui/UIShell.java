@@ -10,11 +10,13 @@ import sh4ll.wrapper.ShellUIWrapper;
 
 public class UIShell {
 
-    private static String ALLOWED_CHARS = " ;.,abcdefgğhıijklmnoöprsştuüvyzwxqABCDEFGHIİJKLMNOÖPRSŞTUÜVYZXQW0123456789?_-~^$#-+%&@!'\"€₺æ/`\\()[]{}";
+    private static final String ALLOWED_CHARS = " ;.,abcdefgğhıijklmnoöprsştuüvyzwxqABCDEFGHIİJKLMNOÖPRSŞTUÜVYZXQW0123456789?_-~^$#-+%&@!'\"€₺æ/`\\()[]{}";
 
     private ShellTheme theme;
     private ShellUIWrapper wrapper;
     private int cursorPos;
+
+    private static final String USER_ALIAS = "$user@$client";
 
     public void onOpen() {
         if (wrapper == null) {
@@ -57,7 +59,8 @@ public class UIShell {
 
         if (Shell._self.getWritingInput().length() > 0) {
             if (keyCode == Keyboard.KEY_RETURN) {
-                Shell._self.outputs().add(new NormalTextBlock(Shell._self.getWritingInput().toString()));
+                //TODO: Change this to custom textBlock for command input
+                Shell._self.writeLine(new NormalTextBlock("§d" + Shell._self.getShellUI().getCustomUserAlias() + "§5 ~ §f" + Shell._self.getWritingInput().toString()));
                 cursorPos=0;
                 Shell._self.getWritingInput().delete(0, Shell._self.getWritingInput().length());
             }
@@ -87,6 +90,10 @@ public class UIShell {
 
     public boolean isCursorAtLastChar() {
         return cursorPos == Shell._self.getWritingInput().length();
+    }
+
+    public String getCustomUserAlias() {
+        return USER_ALIAS.replace("$user", (String) Shell._self.dynamic().get("client_username").getValue()).replace("$client", (String) Shell._self.dynamic().get("client_name").getValue());
     }
 
     public void setTheme(ShellTheme newTheme) {

@@ -177,25 +177,25 @@ public abstract class ShellTheme {
 	 */
 	public abstract void update();
 
-
-	public List<TextBlock> getRenderBlocks(int height, MinecraftFontRenderer fontRenderer) {
-		List<TextBlock> blocks = new ArrayList<>();
-		int currentHeight = 0;
-		int totalHeight = 0;
-		int scrollLoc = (int) Shell._self.values().get("shell_scroll_location").getValue();
-		for (TextBlock textBlock : Shell._self.outputs()) {
-			if (totalHeight >= height) break;
-
-			if (currentHeight >= scrollLoc) {
-				blocks.add(textBlock);
-			}
-
-			/* adds textblocks height */
-			currentHeight += textBlock.getTextLength(fontRenderer).getSecond().getSecond();
-		}
-
-		return blocks;
-	}
+//TODO: NOT ANYMORE
+//	public List<TextBlock> getRenderBlocks(int height, MinecraftFontRenderer fontRenderer) {
+//		List<TextBlock> blocks = new ArrayList<>();
+//		int currentHeight = 0;
+//		int totalHeight = 0;
+//		int scrollLoc = (int) Shell._self.values().get("shell_scroll_location").getValue();
+//		for (TextBlock textBlock : Shell._self.outputs()) {
+//			if (totalHeight >= height) break;
+//
+//			if (currentHeight >= scrollLoc) {
+//				blocks.add(textBlock);
+//			}
+//
+//			/* adds textblocks height */
+//			currentHeight += textBlock.getTextLength(fontRenderer).getSecond().getSecond();
+//		}
+//
+//		return blocks;
+//	}
 
 
 
