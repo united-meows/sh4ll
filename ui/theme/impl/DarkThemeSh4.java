@@ -120,7 +120,7 @@ public class DarkThemeSh4 extends ShellTheme {
                     shellY + DRAGBAR_HEIGHT + 5);
             if (clickedTextBlock == null) {
                 titleFont.drawString(selectedTextBlock.getText(),2,2, colors.get("owner").getRGB());
-                Gui.drawRect(selectedTextBlock.getX(), selectedTextBlock.getY(), selectedTextBlock.getWidth(), selectedTextBlock.getHeight(), new Color(255, 2, 2,100).getRGB());
+                Gui.drawRect((int)selectedTextBlock.getX(), (int)selectedTextBlock.getY(), (int)selectedTextBlock.getWidth(), (int)selectedTextBlock.getHeight(), new Color(255, 2, 2,100).getRGB());
             }
             for (TextBlock textBlock : Shell._self.outputs()) {
                 if (y >= shellY + DRAGBAR_HEIGHT + 5) {
@@ -142,9 +142,9 @@ public class DarkThemeSh4 extends ShellTheme {
                                 selectedTextBlock.setLast(str);
                                 selectedTextBlock.setLastIndex(i);
                                 selectedTextBlock.setY(y - 2);
-                                selectedTextBlock.setWidth(x+titleFont.getStringWidth(str));
+                                selectedTextBlock.setWidth(x + titleFont.getStringWidth(str));
                                 selectedTextBlock.setHeight(y+6);
-                                Gui.drawRect(x, y-2, x+titleFont.getStringWidth(str), y+6, new Color(255, 2, 2,100).getRGB());
+                                RenderMethods.drawRect(x, y-2, x + titleFont.getStringWidth(str), y+6, new Color(0, 0, 0, 100).getRGB());
                             }
                             x+=titleFont.getStringWidth(str);
                         }
