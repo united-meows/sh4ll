@@ -44,7 +44,7 @@ public class CFont {
         boolean var9 = false;
         for (int var10 = var6; var10 >= 0 && var10 < p_78262_1_.length() && var5 < p_78262_2_; var10 += var7) {
             char var11 = p_78262_1_.charAt(var10);
-            float var12 = getStringWidth(String.valueOf(var11));
+            float var12 = (float)getStringWidth(String.valueOf(var11));
             if (var8) {
                 var8 = false;
                 if (var11 != 'l' && var11 != 'L') {
@@ -126,7 +126,7 @@ public class CFont {
 
     public void drawChar(CharData[] chars, char c, float x, float y) throws ArrayIndexOutOfBoundsException {
         try {
-            drawQuad(x, y, (chars[c]).width, (chars[c]).height, (chars[c]).storedX, (chars[c]).storedY, (chars[c]).width,
+            drawQuad(x, y, (float)(chars[c]).width, (chars[c]).height, (chars[c]).storedX, (chars[c]).storedY, (float)(chars[c]).width,
                     (chars[c]).height);
         } catch (Exception e) {
             e.printStackTrace();
@@ -160,14 +160,14 @@ public class CFont {
         return (this.fontHeight - 8) / 2;
     }
 
-    public int getStringWidth(String text) {
-        int width = 0;
+    public double getStringWidth(String text) {
+        double width = 0;
         byte b;
         int i;
         char[] arrayOfChar;
         for (i = (arrayOfChar = text.toCharArray()).length, b = 0; b < i; ) {
             char c = arrayOfChar[b];
-            if (c < this.charData.length && c >= '\000')
+            if (c < this.charData.length)
                 width += (this.charData[c]).width - 8 + this.charOffset;
             b++;
         }
@@ -206,7 +206,7 @@ public class CFont {
     }
 
     protected class CharData {
-        public int width;
+        public double width;
 
         public int height;
 

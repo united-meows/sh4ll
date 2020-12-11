@@ -5,9 +5,6 @@ import java.awt.Font;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.lwjgl.input.Cursor;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.Gui;
@@ -16,6 +13,8 @@ import sh4ll.etc.Anchor;
 import sh4ll.etc.IUpdatable;
 import sh4ll.etc.RenderMethods;
 import sh4ll.ui.DragMethod;
+import sh4ll.ui.textblock.TextBlock;
+import sh4ll.ui.textblock.def.SelectableTextBlock;
 import sh4ll.ui.theme.ShellTheme;
 import sh4ll.util.MinecraftFontRenderer;
 import sh4ll.value.XValue;
@@ -35,6 +34,8 @@ public class DarkThemeSh4 extends ShellTheme {
 	private boolean scaling;
 	private Anchor side;
 	private int clickedX, clickedY;
+	private TextBlock clickedTextBlock;
+	private SelectableTextBlock selectedTextBlock = new SelectableTextBlock();
 
 	private static Color TRANSPARANT_COLOR = new Color(0, 0, 0, 0);
 
@@ -104,22 +105,62 @@ public class DarkThemeSh4 extends ShellTheme {
 		RenderMethods.drawGradientRect(shellX, shellY, shellX + shellWidth, shellY + DRAGBAR_HEIGHT, colors.get("dragbar_start").getRGB(), colors.get("dragbar_end").getRGB());
 		GL11.glPopMatrix();
 		titleFont.drawString(Shell._self.getWritingInput().toString(), shellX + 5, shellY + shellHeight + 8, colors.get("writing").getRGB());
-		titleFont.drawString(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase(), shellX + shellWidth / 2f - titleFont.getStringWidth(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase()) / 2f, shellY + 8, colors.get("owner").getRGB());
+		titleFont.drawString(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase(), (float) (shellX + shellWidth / 2f - titleFont.getStringWidth(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase()) / 2f), shellY + 8, colors.get("owner").getRGB());
 
 
-		final float writingWidth = titleFont.getStringWidth(Shell._self.getWritingInput().toString());
+		final float writingWidth = (float) titleFont.getStringWidth(Shell._self.getWritingInput().toString());
 
 		// TEXT BLOCKS CODE
 		// ==============================
 
+        if (Shell._self.outputs().size() > 0) {
+            int outOfBounds = (shellHeight - 8)/14;
+            int y = (Shell._self.outputs().size()*14 + shellY + DRAGBAR_HEIGHT + 5 > shellY + DRAGBAR_HEIGHT + shellHeight ?
+                    (shellY + DRAGBAR_HEIGHT + 5) - ((14*(Shell._self.outputs().size()-outOfBounds))) :
+                    shellY + DRAGBAR_HEIGHT + 5);
+            if (clickedTextBlock == null) {
+                titleFont.drawString(selectedTextBlock.getText(),2,2, colors.get("owner").getRGB());
+                Gui.drawRect(selectedTextBlock.getX(), selectedTextBlock.getY(), selectedTextBlock.getWidth(), selectedTextBlock.getHeight(), new Color(255, 2, 2,100).getRGB());
+            }
+            for (TextBlock textBlock : Shell._self.outputs()) {
+                if (y >= shellY + DRAGBAR_HEIGHT + 5) {
+                    if (clickedTextBlock == textBlock && selectedTextBlock != null) {
+                        String[] split = textBlock.getText().split("");
+                        double x = shellX+5;
+                        selectedTextBlock.setFirst("");
+                        selectedTextBlock.setLast("");
+                        selectedTextBlock.setFirstIndex(-1);
+                        selectedTextBlock.setLastIndex(-1);
+                        for (int i = 0; i < split.length; i++) {
+                            String str = split[i];
+                            if ((clickedX >= x-1 && mouseX <= x) || (clickedX <= x && mouseX-1 >= x)) {
+                                if (selectedTextBlock.getFirst().equals("")) {
+                                    selectedTextBlock.setFirstIndex(i);
+                                    selectedTextBlock.setFirst(str);
+                                    selectedTextBlock.setX(x);
+                                }
+                                selectedTextBlock.setLast(str);
+                                selectedTextBlock.setLastIndex(i);
+                                selectedTextBlock.setY(y - 2);
+                                selectedTextBlock.setWidth(x+titleFont.getStringWidth(str));
+                                selectedTextBlock.setHeight(y+6);
+                                Gui.drawRect(x, y-2, x+titleFont.getStringWidth(str), y+6, new Color(255, 2, 2,100).getRGB());
+                            }
+                            x+=titleFont.getStringWidth(str);
+                        }
+                    }
+                    titleFont.drawString(textBlock.getText(), shellX + 5, y, colors.get("writing").getRGB());
+                }
+                y += 14;
+            }
+        }
 		// ==============================
 
-
-		// CURSOR (POINTER) CODE
+		// CURSOR (POINTER) CODE<
 		// ===============================
 		Color insideColor = cursorState && Shell._self.getShellUI().isCursorAtLastChar() ? colors.get("cursor_inside") : TRANSPARANT_COLOR;
 		int cursorPos = Shell._self.getShellUI().getCursorPos();
-		int cursorX = cursorPos == 0 ? 0 : titleFont.getStringWidth(Shell._self.getWritingInput().substring(0, cursorPos));
+		int cursorX = cursorPos == 0 ? 0 : (int) titleFont.getStringWidth(Shell._self.getWritingInput().substring(0, cursorPos));
 		RenderMethods.drawBorderedRect(5 + shellX + cursorX, shellY + shellHeight +
 				5.5f, 10 + shellX + cursorX, shellY + shellHeight + 14, 0.5F, insideColor.getRGB(), colors.get("cursor_outline").getRGB());
 		// ===============================
@@ -151,9 +192,27 @@ public class DarkThemeSh4 extends ShellTheme {
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		colors.put("writing", new Color(201, 201, 201));
+        int shellX = (int) Shell._self.values().get("shell_x").getValue();
+        int shellY = (int) Shell._self.values().get("shell_y").getValue();
+        int shellHeight = (int) Shell._self.values().get("shell_height").getValue();
+        if (Shell._self.outputs().size() > 0) {
+            int outOfBounds = (shellHeight - 8)/14;
+            int y = (Shell._self.outputs().size()*14 + shellY + DRAGBAR_HEIGHT + 5 > shellY + DRAGBAR_HEIGHT + shellHeight ?
+                    (shellY + DRAGBAR_HEIGHT + 5) - ((14*(Shell._self.outputs().size()-outOfBounds))) :
+                    shellY + DRAGBAR_HEIGHT + 5);
+            for (TextBlock textBlock : Shell._self.outputs()) {
+                if (y >= shellY + DRAGBAR_HEIGHT + 5) {
+                    System.out.println(mouseX+" : "+(shellX+5+titleFont.getStringWidth(textBlock.getText())));
+                    if (mouseX >= shellX+5 && mouseX <= shellX+5+titleFont.getStringWidth(textBlock.getText()) && mouseY >= y-2 && mouseY <= y+6) {
+                        clickedX = mouseX;
+                        clickedY = mouseY;
+                        clickedTextBlock = textBlock;
+                    }
+                }
+                y += 14;
+            }
+        }
 		if (isSidesHovered(mouseX, mouseY)) {
-			clickedX = mouseX;
-			clickedY = mouseY;
 			scaling = true;
 		}
 	}
@@ -222,6 +281,14 @@ public class DarkThemeSh4 extends ShellTheme {
 	@Override
 	public void mouseReleased(int mouseX, int mouseY, int state) {
 		scaling = false;
+		if (clickedTextBlock != null && selectedTextBlock.getFirstIndex() > -1 && selectedTextBlock.getLastIndex() > -1) {
+            selectedTextBlock.setText("");
+            for (int i = selectedTextBlock.getFirstIndex(); i <= selectedTextBlock.getLastIndex(); i++) {
+                String str = clickedTextBlock.getText().split("")[i];
+                selectedTextBlock.setText(selectedTextBlock.getText() + str);
+            }
+        }
+		clickedTextBlock = null;
 	}
 
 

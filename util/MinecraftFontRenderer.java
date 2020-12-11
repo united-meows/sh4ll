@@ -43,11 +43,11 @@ public class MinecraftFontRenderer extends CFont
     }
 
     public float drawCenteredString(final String text, final float x, final float y, final int color) {
-        return this.drawString(text, x - this.getStringWidth(text) / 2, y, color);
+        return this.drawString(text, (float) (x - this.getStringWidth(text) / 2), y, color);
     }
 
     public float drawCenteredStringWithShadow(final String text, final float x, final float y, final int color) {
-        return this.drawString(text, x - this.getStringWidth(text) / 2, y, color);
+        return this.drawString(text, (float) (x - this.getStringWidth(text) / 2), y, color);
     }
 
     public Color getChromaColor(final double x, final double y, final double offsetScale) {
@@ -235,12 +235,12 @@ public class MinecraftFontRenderer extends CFont
     }
 
     @Override
-    public int getStringWidth(String text) {
+    public double getStringWidth(String text) {
         if (text == null) {
             return 0;
         }
         text = text.replace('\u0131', 'i').replace('\u011f', 'g').replace('\u00fc', 'u').replace('\u015f', 's').replace('\u00f6', 'o').replace('\u00e7', 'c').replace('\u0130', 'I');
-        int width = 0;
+        double width = 0;
         CharData[] currentData = this.charData;
         boolean bold = false;
         boolean italic = false;

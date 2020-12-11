@@ -3,6 +3,7 @@ package sh4ll.ui;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 import sh4ll.Shell;
+import sh4ll.ui.textblock.def.NormalTextBlock;
 import sh4ll.ui.theme.ShellTheme;
 import sh4ll.wrapper.ShellUIWrapper;
 
@@ -56,6 +57,7 @@ public class UIShell {
 
         if (Shell._self.getWritingInput().length() > 0) {
             if (keyCode == Keyboard.KEY_RETURN) {
+                Shell._self.outputs().add(new NormalTextBlock(Shell._self.getWritingInput().toString()));
                 cursorPos=0;
                 Shell._self.getWritingInput().delete(0, Shell._self.getWritingInput().length());
             }

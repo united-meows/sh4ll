@@ -25,6 +25,10 @@ public abstract class TextBlock {
         return text;
     }
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
     protected MinecraftFontRenderer getFontRenderer() {
         return fontRenderer;
     }
