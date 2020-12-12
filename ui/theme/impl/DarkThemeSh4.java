@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.util.StringUtils;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.Gui;
@@ -41,6 +42,8 @@ public class DarkThemeSh4 extends ShellTheme {
 
 	// Fist and last index of selected place
 	private int firstIndex,lastIndex;
+
+	private int scroll;
 
     private static Color TRANSPARANT_COLOR = new Color(0, 0, 0, 0);
 
@@ -119,18 +122,27 @@ public class DarkThemeSh4 extends ShellTheme {
 		// ==============================
 
         if (Shell._self.outputs().size() > 0) {
-            int outOfBounds = (shellHeight - 8)/14;
-            int y = (Shell._self.outputs().size()*14 + shellY + DRAGBAR_HEIGHT + 5 > shellY + DRAGBAR_HEIGHT + shellHeight ?
-                    (shellY + DRAGBAR_HEIGHT + 5) - ((14*(Shell._self.outputs().size()-outOfBounds))) :
-                    shellY + DRAGBAR_HEIGHT + 5);
+            int outOfBounds = (shellHeight - 8)/10;
+            int y = (Shell._self.outputs().size()*10 + shellY + DRAGBAR_HEIGHT + 5 > shellY + DRAGBAR_HEIGHT + shellHeight ?
+                    (shellY + DRAGBAR_HEIGHT + 5) - ((10*(Shell._self.outputs().size()-outOfBounds))) :
+                    shellY + DRAGBAR_HEIGHT + 5) + scroll;
+            //RenderMethods.drawRect(shellX+shellWidth-2,y+(Shell._self.outputs().size()*10)/(Shell._self.outputs().size()*10-scroll),shellX+shellWidth,y+(Shell._self.outputs().size()*10)/(Shell._self.outputs().size()*10-scroll)+10, Color.white.getRGB());
             if (clickedTextBlock == null) {
                 titleFont.drawString(selectedTextBlock.getText(),2,2, colors.get("owner").getRGB());
                 //titleFont.drawString(RenderMethods.clearColorCodes(selectedTextBlock.getText()),2,12, colors.get("owner").getRGB());
                 RenderMethods.drawRect(shellX+5+selectedTextBlock.getX(), shellY+DRAGBAR_HEIGHT+5+selectedTextBlock.getY(), shellX+5+selectedTextBlock.getWidth(), shellY+DRAGBAR_HEIGHT+5+selectedTextBlock.getY()+selectedTextBlock.getHeight(), new Color(255, 2, 2,100).getRGB());
             }
+            boolean negScroll = false;
+            boolean posScroll = false;
 			for (Tuple<TextBlock, Boolean> textBlockVal : Shell._self.outputs()) {
 				final TextBlock textBlock = textBlockVal.getFirst();
-                if (y >= shellY + DRAGBAR_HEIGHT + 5) {
+				if (y < shellY + DRAGBAR_HEIGHT + 5) {
+                    negScroll = true;
+                }
+				if (y > shellY + DRAGBAR_HEIGHT + shellHeight-20) {
+				    posScroll = true;
+                }
+                if (y >= shellY + DRAGBAR_HEIGHT + 5 && y <= shellY + DRAGBAR_HEIGHT + shellHeight-20) {
                     if (clickedTextBlock == textBlock && selectedTextBlock != null) {
                         String[] split = RenderMethods.clearColorCodes(textBlock.getText()).split("");
                         double x = shellX+5;
@@ -160,7 +172,13 @@ public class DarkThemeSh4 extends ShellTheme {
                     y += 10;
                 }
             }
+			int dWheel = Mouse.getDWheel();
+            int mouse = dWheel > 0 ? 10 : dWheel < 0 ? -10 : 0;
+            if ((posScroll && mouse < 0) || (negScroll && mouse > 0)) {
+                scroll+=mouse;
+            }
         }
+
 		// ==============================
 
 		// CURSOR (POINTER) CODE<
@@ -203,10 +221,10 @@ public class DarkThemeSh4 extends ShellTheme {
         int shellY = (int) Shell._self.values().get("shell_y").getValue();
         int shellHeight = (int) Shell._self.values().get("shell_height").getValue();
         if (Shell._self.outputs().size() > 0) {
-            int outOfBounds = (shellHeight - 8)/14;
-            int y = (Shell._self.outputs().size()*14 + shellY + DRAGBAR_HEIGHT + 5 > shellY + DRAGBAR_HEIGHT + shellHeight ?
-                    (shellY + DRAGBAR_HEIGHT + 5) - ((14*(Shell._self.outputs().size()-outOfBounds))) :
-                    shellY + DRAGBAR_HEIGHT + 5);
+            int outOfBounds = (shellHeight - 8)/10;
+            int y = (Shell._self.outputs().size()*10 + shellY + DRAGBAR_HEIGHT + 5 > shellY + DRAGBAR_HEIGHT + shellHeight ?
+                    (shellY + DRAGBAR_HEIGHT + 5) - ((10*(Shell._self.outputs().size()-outOfBounds))) :
+                    shellY + DRAGBAR_HEIGHT + 5) + scroll;
             for (Tuple<TextBlock, Boolean> textBlockVal : Shell._self.outputs()) {
             	final TextBlock textBlock = textBlockVal.getFirst();
                 if (y >= shellY + DRAGBAR_HEIGHT + 5) {
