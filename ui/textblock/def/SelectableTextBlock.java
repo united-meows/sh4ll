@@ -6,14 +6,6 @@ import sh4ll.util.MinecraftFontRenderer;
 
 public class SelectableTextBlock  extends TextBlock {
     private double x,y,width,height;
-    /**
-     * Selected first and Last word of the parent
-     */
-    private String first,last;
-    /**
-     * Selected first and Last word index of the parent
-     */
-    private int firstIndex,lastIndex;
 
     public SelectableTextBlock(String _text) {
         super(_text, null);
@@ -71,37 +63,5 @@ public class SelectableTextBlock  extends TextBlock {
 
     public void setHeight(double height) {
         this.height = height;
-    }
-
-    public String getFirst() {
-        return first;
-    }
-
-    public void setFirst(String first) {
-        this.first = first;
-    }
-
-    public String getLast() {
-        return last;
-    }
-
-    public void setLast(String last) {
-        this.last = last;
-    }
-
-    public int getLastIndex() {
-        return lastIndex;
-    }
-
-    public void setLastIndex(int lastIndex) {
-        this.lastIndex = lastIndex;
-    }
-
-    public int getFirstIndex() {
-        return firstIndex;
-    }
-
-    public void setFirstIndex(int firstIndex) {
-        this.firstIndex = firstIndex;
     }
 }

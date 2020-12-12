@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.util.StringUtils;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.Gui;
@@ -38,7 +39,10 @@ public class DarkThemeSh4 extends ShellTheme {
 	private TextBlock clickedTextBlock;
 	private SelectableTextBlock selectedTextBlock = new SelectableTextBlock(false);
 
-	private static Color TRANSPARANT_COLOR = new Color(0, 0, 0, 0);
+	// Fist and last index of selected place
+	private int firstIndex,lastIndex;
+
+    private static Color TRANSPARANT_COLOR = new Color(0, 0, 0, 0);
 
 	public DarkThemeSh4() {
 		super("DarkTheme", DragMethod.TOP, DRAGBAR_HEIGHT);
@@ -121,32 +125,31 @@ public class DarkThemeSh4 extends ShellTheme {
                     shellY + DRAGBAR_HEIGHT + 5);
             if (clickedTextBlock == null) {
                 titleFont.drawString(selectedTextBlock.getText(),2,2, colors.get("owner").getRGB());
-                Gui.drawRect((int)selectedTextBlock.getX(), (int)selectedTextBlock.getY(), (int)selectedTextBlock.getWidth(), (int)selectedTextBlock.getHeight(), new Color(255, 2, 2,100).getRGB());
+                //titleFont.drawString(RenderMethods.clearColorCodes(selectedTextBlock.getText()),2,12, colors.get("owner").getRGB());
+                RenderMethods.drawRect(shellX+5+selectedTextBlock.getX(), shellY+DRAGBAR_HEIGHT+5+selectedTextBlock.getY(), shellX+5+selectedTextBlock.getWidth(), shellY+DRAGBAR_HEIGHT+5+selectedTextBlock.getY()+selectedTextBlock.getHeight(), new Color(255, 2, 2,100).getRGB());
             }
 			for (Tuple<TextBlock, Boolean> textBlockVal : Shell._self.outputs()) {
 				final TextBlock textBlock = textBlockVal.getFirst();
                 if (y >= shellY + DRAGBAR_HEIGHT + 5) {
                     if (clickedTextBlock == textBlock && selectedTextBlock != null) {
-                        String[] split = textBlock.getText().split("");
+                        String[] split = RenderMethods.clearColorCodes(textBlock.getText()).split("");
                         double x = shellX+5;
-                        selectedTextBlock.setFirst("");
-                        selectedTextBlock.setLast("");
-                        selectedTextBlock.setFirstIndex(-1);
-                        selectedTextBlock.setLastIndex(-1);
+                        boolean first = false;
+                        firstIndex=-1;
+                        lastIndex=-1;
                         for (int i = 0; i < split.length; i++) {
                             String str = split[i];
                             if ((clickedX >= x-1 && mouseX <= x) || (clickedX <= x && mouseX-1 >= x)) {
-                                if (selectedTextBlock.getFirst().equals("")) {
-                                    selectedTextBlock.setFirstIndex(i);
-                                    selectedTextBlock.setFirst(str);
-                                    selectedTextBlock.setX(x);
+                                if (!first) {
+                                    firstIndex=i;
+                                    selectedTextBlock.setX((x)-(shellX+5));
+                                    first = true;
                                 }
-                                selectedTextBlock.setLast(str);
-                                selectedTextBlock.setLastIndex(i);
-                                selectedTextBlock.setY(y - 2);
-                                selectedTextBlock.setWidth(x + titleFont.getStringWidth(str));
-                                selectedTextBlock.setHeight(y+6);
-                                RenderMethods.drawRect(x, y-2, x + titleFont.getStringWidth(str), y+6, new Color(0, 0, 0, 100).getRGB());
+                                lastIndex = i;
+                                selectedTextBlock.setY((y - 2) - (shellY+DRAGBAR_HEIGHT+5));
+                                selectedTextBlock.setWidth(x-(shellX+5)+titleFont.getStringWidth(str));
+                                selectedTextBlock.setHeight(8);
+                                //RenderMethods.drawRect(x, y-2, x + titleFont.getStringWidth(str), y+6, new Color(255, 0, 0, 100).getRGB());
                             }
                             x+=titleFont.getStringWidth(str);
                         }
@@ -163,8 +166,8 @@ public class DarkThemeSh4 extends ShellTheme {
 		// CURSOR (POINTER) CODE<
 		// ===============================
 		Color insideColor = cursorState && Shell._self.getShellUI().isCursorAtLastChar() ? colors.get("cursor_inside") : TRANSPARANT_COLOR;
-		int cursorPos = Shell._self.getShellUI().getCursorPos();
-		int cursorX = (int)titleFont.getStringWidth(Shell._self.getShellUI().getCustomUserAlias()) + 9 + (cursorPos == 0 ? 0 : (int) titleFont.getStringWidth(Shell._self.getWritingInput().substring(0, cursorPos)));
+		int cursorPos = Math.max(0,Shell._self.getShellUI().getCursorPos());
+		int cursorX = (int)titleFont.getStringWidth(Shell._self.getShellUI().getCustomUserAlias()) + 9 + (cursorPos == 0 ? 0 : (int) titleFont.getStringWidth(Shell._self.getWritingInput().substring(0, cursorPos)))-1;
 		RenderMethods.drawBorderedRect(5 + shellX + cursorX, shellY + shellHeight +
 				5.5f, 10 + shellX + cursorX, shellY + shellHeight + 14, 0.5F, insideColor.getRGB(), colors.get("cursor_outline").getRGB());
 		// ===============================
@@ -207,8 +210,8 @@ public class DarkThemeSh4 extends ShellTheme {
             for (Tuple<TextBlock, Boolean> textBlockVal : Shell._self.outputs()) {
             	final TextBlock textBlock = textBlockVal.getFirst();
                 if (y >= shellY + DRAGBAR_HEIGHT + 5) {
-                    System.out.println(mouseX+" : "+(shellX+5+titleFont.getStringWidth(textBlock.getText())));
-                    if (mouseX >= shellX+5 && mouseX <= shellX+5+titleFont.getStringWidth(textBlock.getText()) && mouseY >= y-2 && mouseY <= y+6) {
+                    //System.out.println(mouseX+" : "+(shellX+5+titleFont.getStringWidth(textBlock.getText())));
+                    if (mouseX >= shellX+5 && mouseX <= shellX+5+titleFont.getStringWidth(RenderMethods.clearColorCodes(textBlock.getText())) && mouseY >= y-2 && mouseY <= y+6) {
                         clickedX = mouseX;
                         clickedY = mouseY;
                         clickedTextBlock = textBlock;
@@ -287,11 +290,11 @@ public class DarkThemeSh4 extends ShellTheme {
 	@Override
 	public void mouseReleased(int mouseX, int mouseY, int state) {
 		scaling = false;
-		if (clickedTextBlock != null && selectedTextBlock.getFirstIndex() > -1 && selectedTextBlock.getLastIndex() > -1) {
+		if (clickedTextBlock != null && firstIndex > -1 && lastIndex > 0) {
             selectedTextBlock.setText("");
-            for (int i = selectedTextBlock.getFirstIndex(); i <= selectedTextBlock.getLastIndex(); i++) {
-                String str = clickedTextBlock.getText().split("")[i];
-                selectedTextBlock.setText(selectedTextBlock.getText() + str);
+            for (int i = firstIndex; i <= lastIndex; i++) {
+                String str = RenderMethods.clearColorCodes(clickedTextBlock.getText()).split("")[i];
+                selectedTextBlock.setText(RenderMethods.clearColorCodes(selectedTextBlock.getText()) + str);
             }
         }
 		clickedTextBlock = null;

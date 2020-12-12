@@ -41,7 +41,17 @@ public class MinecraftFontRenderer extends CFont
     public float drawString(final String text, final float x, final float y, final int color) {
         return this.drawString(text, x, y, color, false);
     }
-
+    public void drawStringCustomColor(final String text, final float x, final float y, final int color) {
+        char c = '(';
+        this.drawString(text.split(String.valueOf(c))[0], x, y, color, false);
+        int size = text.length()-text.replace("(","").length();
+        for (int i = 0; i < size; i++) {
+            String sub = text.substring(text.indexOf("("),text.indexOf(")")+1);
+            String[] colorArray = sub.split(",");
+            Color newColor = new Color(Integer.parseInt(colorArray[0]),Integer.parseInt(colorArray[1]),Integer.parseInt(colorArray[2]));
+            this.drawString(text.split(String.valueOf(c))[0], x, y, color, false);
+        }
+    }
     public float drawCenteredString(final String text, final float x, final float y, final int color) {
         return this.drawString(text, (float) (x - this.getStringWidth(text) / 2), y, color);
     }

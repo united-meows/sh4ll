@@ -18,7 +18,7 @@ public class ShellUIWrapper extends GuiScreen {
         repeatableKeys.add(new RepeatableKey(Keyboard.KEY_BACK) {
             @Override
             public void action() {
-                if (Shell._self.getWritingInput().length() > 0) {
+                if (Shell._self.getWritingInput().length() > 0 && Shell._self.getShellUI().getCursorPos() > 0) {
                     Shell._self.getWritingInput().deleteCharAt(Math.max(0, Shell._self.getShellUI().getCursorPos() - 1));
                     Shell._self.getShellUI().setCursorPos(Shell._self.getShellUI().getCursorPos() - 1);
                 }

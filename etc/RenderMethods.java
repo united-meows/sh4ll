@@ -183,4 +183,20 @@ public class RenderMethods {
 		GlStateManager.disableBlend();
 		GL11.glPopMatrix();
 	}
+
+	public static String clearColorCodes(String str) {
+	    StringBuilder result = new StringBuilder();
+	    String[] split = str.split("");
+	    boolean found = false;
+	    for (int i = 0; i < split.length; i++) {
+	        if (i-1 >= 0 && split[i-1].equals("§")) {
+	            found = true;
+            }
+	        if (!found) {
+	            result.append(split[i]);
+            }
+	        found = false;
+        }
+	    return result.toString().replace("§","");
+    }
 }
