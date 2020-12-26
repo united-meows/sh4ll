@@ -197,7 +197,40 @@ public abstract class ShellTheme {
 //		return blocks;
 //	}
 
+	public int getTotalHeightBlocks(MinecraftFontRenderer font, int offsetY, int startX, int shellWidth) {
+		int y = 0;
+		for (Tuple<TextBlock, Boolean> block : Shell._self.outputs()) {
+			List<String> lines = getLines(font, block.getFirst().getText(), startX, shellWidth);
+			int i = 0;
+			for (String line : lines) {
+				if (i + 1 == line.length()) {
+					if (block.getSecond()) {
+						y += offsetY;
+					}
+				} else {
+					y += offsetY;
+				}
+				i++;
+			}
+		}
+		return y;
+	}
 
+	public List<String> getLines(MinecraftFontRenderer fontRenderer, String input, int startX, int maxWidth) {
+		List<String> lines = new ArrayList<>();
+		StringBuilder currentLine = new StringBuilder();
+		for (int i = 0; i < input.length(); i++) {
+			if (fontRenderer.getStringWidth(currentLine.toString()) + startX > maxWidth) {
+				lines.add(currentLine.toString());
+				currentLine = new StringBuilder();
+			}
+			currentLine.append(input.charAt(i));
+		}
+		if (currentLine.length() > 0) {
+			lines.add(currentLine.toString());
+		}
+		return lines;
+	}
 
 	public void _clickDrag(int mouseX, int mouseY) {
 		Shell._self.values().get("shell_x").setValue(Shell._self.getX() + (mouseX - lastX));

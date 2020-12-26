@@ -61,6 +61,7 @@ public class UIShell {
             if (keyCode == Keyboard.KEY_RETURN) {
                 //TODO: Change this to custom textBlock for command input
                 Shell._self.writeLine(new NormalTextBlock("§d" + Shell._self.getShellUI().getCustomUserAlias() + "§5 ~ §f" + Shell._self.getWritingInput().toString()));
+                Shell._self.execute();
                 cursorPos=0;
                 Shell._self.getWritingInput().delete(0, Shell._self.getWritingInput().length());
             }

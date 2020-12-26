@@ -86,9 +86,46 @@ public class Shell {
 
         final Exec exec = getExec(baseCommand);
         if (exec != null) {
-            return exec.runExec(input, split(input));
-        }
+            exec.setup();
 
+            if (input.contains(" ")) {
+                int i = 0;
+                final String[] splitted = input.substring(baseCommand.length() + 1).split(" ");
+                for (String str : splitted) {
+                    if (str.startsWith("--"))
+                        exec.getSettings().add(str.replace("--", ""));
+                }
+                String[] arrayOfString1;
+                int j;
+                byte b;
+                for (arrayOfString1 = exec.getExpectedInputs(), j = arrayOfString1.length, b = 0; b < j; ) {
+                    String exceptedInput = arrayOfString1[b];
+                    if (splitted.length > i && !splitted[i].startsWith("--")) {
+                        exec.getInputs().put(exceptedInput, splitted[i]);
+                        i++;
+                        b++;
+                    }
+                }
+                if (exec.isUseThread()) {
+                    (new Thread(new Runnable() {
+                        public void run() {
+                            exec.runExec(input, splitted);
+                        }
+                    })).start();
+                } else {
+                    exec.runExec(input, splitted);
+                }
+            } else if (exec.isUseThread()) {
+                (new Thread(new Runnable() {
+                    public void run() {
+                        exec.runExec(input, new String[0]);
+                    }
+                })).start();
+            } else {
+                return exec.runExec(input, new String[0]);
+            }
+
+        }
         /** ========== **/
 
         return StateResult.UNKNOWN_EXIT;
@@ -204,6 +241,10 @@ public class Shell {
 
     public StringBuilder getWritingInput() {
         return writingInput;
+    }
+
+    public void registerExec(Exec ex) {
+        registeredExecs.add(ex);
     }
 
     public ArrayList<Exec> getRegisteredExecs() {

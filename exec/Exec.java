@@ -36,6 +36,7 @@ public abstract class Exec {
     }
 
     public abstract byte /* StateResult */ runExec(String fullText, String[] splitted);
+    public abstract String usage();
 
     public String getInput(final String name) {
         if (hasInput(name)) {
@@ -43,6 +44,7 @@ public abstract class Exec {
         }
         return null;
     }
+
 
     public boolean hasInput(final String name) {
         return inputs.containsKey(name);

@@ -106,6 +106,7 @@ public class ShellUIWrapper extends GuiScreen {
                 repeatableKey.update();
             }
         }
+
         // Update theme's 'update()' function
         Shell._self.getShellUI().getTheme().update();
     }
