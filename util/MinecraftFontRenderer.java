@@ -244,6 +244,20 @@ public class MinecraftFontRenderer extends CFont
         return (float)x / 2.0f;
     }
 
+    public double getStringWidthWithControlCodes(String text) {
+        double width = 0;
+        byte b;
+        int i;
+        char[] arrayOfChar;
+        for (i = (arrayOfChar = text.toCharArray()).length, b = 0; b < i; ) {
+            char c = arrayOfChar[b];
+            if (c < this.charData.length)
+                width += (this.charData[c]).width - 8 + this.charOffset;
+            b++;
+        }
+        return width / 2;
+    }
+
     @Override
     public double getStringWidth(String text) {
         if (text == null) {
@@ -256,7 +270,7 @@ public class MinecraftFontRenderer extends CFont
         boolean italic = false;
         for (int size = text.length(), i = 0; i < size; ++i) {
             final char character = text.charAt(i);
-            if (character == '§' && i < size) {
+            if (character == '§') {
                 final int colorIndex = "0123456789abcdefklmnor".indexOf(character);
                 if (colorIndex < 16) {
                     bold = false;

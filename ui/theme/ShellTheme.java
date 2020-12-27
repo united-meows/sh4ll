@@ -9,6 +9,7 @@ import sh4ll.etc.IUpdatable;
 import sh4ll.etc.Tuple;
 import sh4ll.ui.DragMethod;
 import sh4ll.ui.textblock.TextBlock;
+import sh4ll.util.CFont;
 import sh4ll.util.MinecraftFontRenderer;
 import sh4ll.value.XValue;
 
@@ -231,7 +232,21 @@ public abstract class ShellTheme {
 		}
 		return lines;
 	}
-
+    public List<String> getLinesWithControlCodes(MinecraftFontRenderer fontRenderer, String input, int startX, int maxWidth) {
+        List<String> lines = new ArrayList<>();
+        StringBuilder currentLine = new StringBuilder();
+        for (int i = 0; i < input.length(); i++) {
+            if (fontRenderer.getStringWidthWithControlCodes(currentLine.toString()) + startX > maxWidth) {
+                lines.add(currentLine.toString());
+                currentLine = new StringBuilder();
+            }
+            currentLine.append(input.charAt(i));
+        }
+        if (currentLine.length() > 0) {
+            lines.add(currentLine.toString());
+        }
+        return lines;
+    }
 	public void _clickDrag(int mouseX, int mouseY) {
 		Shell._self.values().get("shell_x").setValue(Shell._self.getX() + (mouseX - lastX));
 		Shell._self.values().get("shell_y").setValue(Shell._self.getY() + (mouseY - lastY));

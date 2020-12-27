@@ -2,6 +2,7 @@ package sh4ll.ui;
 
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import sh4ll.Shell;
 import sh4ll.ui.textblock.def.NormalTextBlock;
 import sh4ll.ui.theme.ShellTheme;
@@ -15,6 +16,8 @@ public class UIShell {
     private ShellTheme theme;
     private ShellUIWrapper wrapper;
     private int cursorPos;
+    private int scroll;
+    private boolean canPosScroll,canNegScroll;
 
     private static final String USER_ALIAS = "$user@$client";
 
@@ -68,6 +71,14 @@ public class UIShell {
         }
     }
 
+    public void onPostRender() {
+        int dWheel = Mouse.getDWheel();
+        int mouse = dWheel > 0 ? 10 : dWheel < 0 ? -10 : 0;
+        if ((canPosScroll() && mouse < 0) || (canNegScroll() && mouse > 0)) {
+            scroll += mouse;
+        }
+    }
+
     /** gets current theme */
     public ShellTheme getTheme() {
         return theme;
@@ -102,5 +113,29 @@ public class UIShell {
             newTheme.setup();
             this.theme = newTheme;
         }
+    }
+
+    public boolean canPosScroll() {
+        return canPosScroll;
+    }
+
+    public void setCanPosScroll(boolean canPosScroll) {
+        this.canPosScroll = canPosScroll;
+    }
+
+    public boolean canNegScroll() {
+        return canNegScroll;
+    }
+
+    public void setCanNegScroll(boolean canNegScroll) {
+        this.canNegScroll = canNegScroll;
+    }
+
+    public int getScroll() {
+        return scroll;
+    }
+
+    public void setScroll(int scroll) {
+        this.scroll = scroll;
     }
 }

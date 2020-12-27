@@ -6,6 +6,7 @@ import sh4ll.util.MinecraftFontRenderer;
 
 public class SelectableTextBlock  extends TextBlock {
     private double x,y,width,height;
+    private String string = "";
 
     public SelectableTextBlock(String _text) {
         super(_text, null);
@@ -63,5 +64,13 @@ public class SelectableTextBlock  extends TextBlock {
 
     public void setHeight(double height) {
         this.height = height;
+    }
+
+    public void setString(String string) {
+        this.string = string;
+    }
+
+    public String getString() {
+        return string;
     }
 }

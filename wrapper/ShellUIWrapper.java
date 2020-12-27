@@ -56,6 +56,7 @@ public class ShellUIWrapper extends GuiScreen {
         }
 
         Shell._self.getShellUI().getTheme().draw(mouseX, mouseY, partialTicks);
+        Shell._self.getShellUI().onPostRender();
     }
 
     @Override
