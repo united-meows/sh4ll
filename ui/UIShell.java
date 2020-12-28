@@ -1,12 +1,17 @@
 package sh4ll.ui;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.StringUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import sh4ll.Shell;
 import sh4ll.ui.textblock.def.NormalTextBlock;
 import sh4ll.ui.theme.ShellTheme;
 import sh4ll.wrapper.ShellUIWrapper;
+
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 
 
 public class UIShell {
@@ -66,10 +71,37 @@ public class UIShell {
                 Shell._self.writeLine(new NormalTextBlock("§d" + Shell._self.getShellUI().getCustomUserAlias() + "§5 ~ §f" + Shell._self.getWritingInput().toString()));
                 Shell._self.execute();
                 cursorPos=0;
+                scroll = 0; /* reset scroll location */
                 Shell._self.getWritingInput().delete(0, Shell._self.getWritingInput().length());
             }
         }
+        // Copy from shell
+        if (keyCode == Keyboard.KEY_C && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL))) {
+            String copyText = getTheme().selection();
+            if (copyText.length() > 0) {
+                StringSelection selection = new StringSelection(copyText);
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                clipboard.setContents(selection, selection);
+            }
+        }
+
+        // Paste
+        if (keyCode == Keyboard.KEY_V && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL))) {
+            String copyText = getTheme().selection();
+            if (copyText.length() > 0) {
+                Shell._self.getWritingInput().append(copyText);
+                cursorPos += StringUtils.stripControlCodes(copyText).length();
+            }
+        }
+
+
     }
+
+    public void copySelected() {
+
+    }
+
+
 
     public void onPostRender() {
         int dWheel = Mouse.getDWheel();

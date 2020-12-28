@@ -140,6 +140,12 @@ public abstract class ShellTheme {
 	 **/
 	public abstract void setup();
 
+
+	/**
+	 * @returns selected text
+	 */
+	public abstract String selection();
+
 	/**
 	 * you can also get mouse values with Shell instance dynamic mouse_x mouse_y
 	 **/

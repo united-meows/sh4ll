@@ -151,7 +151,7 @@ public class DarkThemeSh4 extends ShellTheme {
             for (String line : lines) {
                 if (clickedTextBlock != null) {
                     double wordX = shellX + 5;
-                    String[] split = RenderMethods.clearColorCodes(line).split("");
+                    String[] split = RenderMethods.clearColorCodes(line).split(""); /* wtf ipana */
                     boolean firstWord = false;
                     for (int i1 = 0; i1 < split.length; i1++) {
                         String words = split[i1];
@@ -167,6 +167,9 @@ public class DarkThemeSh4 extends ShellTheme {
                                 selectedTextBlock.setHeight((y + 6) - (y - 2));
                                 RenderMethods.drawRect(wordX, y - 2, wordX + titleFont.getStringWidth(words), y + 6, Color.red.getRGB());
                             } else {
+                            	if (indexes.length <= i1) {
+                            		return;
+								}
                                 indexes[i1] = 0;
                             }
                             wordX += titleFont.getStringWidth(words);
@@ -196,7 +199,7 @@ public class DarkThemeSh4 extends ShellTheme {
         // ===============================
         Color insideColor = cursorState && Shell._self.getShellUI().isCursorAtLastChar() ? colors.get("cursor_inside") : TRANSPARANT_COLOR;
         int cursorPos = Math.max(0, Shell._self.getShellUI().getCursorPos());
-        int cursorX = (int) titleFont.getStringWidth(Shell._self.getShellUI().getCustomUserAlias()) + 9 + (cursorPos == 0 ? 0 : (int) titleFont.getStringWidth(Shell._self.getWritingInput().substring(0, cursorPos))) - 1;
+        int cursorX = (int) titleFont.getStringWidth(Shell._self.getShellUI().getCustomUserAlias()) + 10 + (cursorPos == 0 ? 0 : (int) titleFont.getStringWidth(Shell._self.getWritingInput().substring(0, cursorPos))) - 1;
         RenderMethods.drawBorderedRect(5 + shellX + cursorX, writeY - 2, 10 + shellX + cursorX, writeY + 6, 0.5F, insideColor.getRGB(), colors.get("cursor_outline").getRGB());
         // ===============================
 
@@ -322,6 +325,11 @@ public class DarkThemeSh4 extends ShellTheme {
 				cursorState = !cursorState;
 			}
 		}
+	}
+
+	@Override
+	public String selection() {
+		return selectedTextBlock.getString();
 	}
 
 	@Override
