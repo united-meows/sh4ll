@@ -190,8 +190,9 @@ public class DarkThemeSh4 extends ShellTheme {
         }
 
         int writeY = substractY > 0 ? shellY + shellHeight + 8 : y;
-        titleFont.drawString("§d" + Shell._self.getShellUI().getCustomUserAlias() + "§5 ~ §f" + Shell._self.getWritingInput().toString(), shellX + 5, writeY, colors.get("writing").getRGB());
-
+        String writing = reverseCutLine(titleFont, Shell._self.getWritingInput().toString(), 8 + (int)titleFont.getStringWidth("§d" + Shell._self.getShellUI().getCustomUserAlias() + "§5 ~ §f"), shellWidth);
+       	boolean isCutted = writing.length() !=  Shell._self.getWritingInput().length();
+        titleFont.drawString("§d" + Shell._self.getShellUI().getCustomUserAlias() + "§5 ~ §f" + writing, shellX + 5, writeY, colors.get("writing").getRGB());
 
         // ==============================
 
@@ -199,29 +200,42 @@ public class DarkThemeSh4 extends ShellTheme {
         // ===============================
         Color insideColor = cursorState && Shell._self.getShellUI().isCursorAtLastChar() ? colors.get("cursor_inside") : TRANSPARANT_COLOR;
         int cursorPos = Math.max(0, Shell._self.getShellUI().getCursorPos());
-        int cursorX = (int) titleFont.getStringWidth(Shell._self.getShellUI().getCustomUserAlias()) + 10 + (cursorPos == 0 ? 0 : (int) titleFont.getStringWidth(Shell._self.getWritingInput().substring(0, cursorPos))) - 1;
-        RenderMethods.drawBorderedRect(5 + shellX + cursorX, writeY - 2, 10 + shellX + cursorX, writeY + 6, 0.5F, insideColor.getRGB(), colors.get("cursor_outline").getRGB());
+        int cursorX;
+        if (isCutted) {
+        	cursorX = -777 /* being lazy is cool */;
+		} else {
+        	cursorX = (int) titleFont.getStringWidth(Shell._self.getShellUI().getCustomUserAlias()) + 10 + (cursorPos == 0 ? 0 : (int) titleFont.getStringWidth(Shell._self.getWritingInput().substring(0, cursorPos))) - 1;
+		}
+         RenderMethods.drawBorderedRect(5 + shellX + cursorX, writeY - 2, 10 + shellX + cursorX, writeY + 6, 0.5F, insideColor.getRGB(), colors.get("cursor_outline").getRGB());
         // ===============================
 
         // SCALING CODE
         // ===============================
         if (scaling) {
             if (side == Anchor.TOP || side == Anchor.TOP_RIGHT || side == Anchor.TOP_LEFT) {
-                Shell._self.values().get("shell_y").setValue(mouseY);
-                Shell._self.values().get("shell_height").setValue(shellY + shellHeight - mouseY);
+            	if ((int) Shell._self.values().get("shell_height_min").getValue() < shellY + shellHeight - mouseY) {
+					Shell._self.values().get("shell_y").setValue(mouseY);
+					Shell._self.values().get("shell_height").setValue(shellY + shellHeight - mouseY);
+				}
             }
 
             if (side == Anchor.BOTTOM || side == Anchor.BOTTOM_LEFT || side == Anchor.BOTTOM_RIGHT) {
-                Shell._self.values().get("shell_height").setValue(mouseY - shellY - 20);
+				if ((int) Shell._self.values().get("shell_height_min").getValue() < mouseY - shellY - 20) {
+					Shell._self.values().get("shell_height").setValue(mouseY - shellY - 20);
+				}
             }
 
             if (side == Anchor.LEFT || side == Anchor.BOTTOM_LEFT || side == Anchor.TOP_LEFT) {
-                Shell._self.values().get("shell_x").setValue(mouseX);
-                Shell._self.values().get("shell_width").setValue(shellX + shellWidth - mouseX);
+            	if ((int) Shell._self.values().get("shell_width_min").getValue() <shellX + shellWidth - mouseX) {
+					Shell._self.values().get("shell_x").setValue(mouseX);
+					Shell._self.values().get("shell_width").setValue(shellX + shellWidth - mouseX);
+				}
             }
 
             if (side == Anchor.RIGHT || side == Anchor.BOTTOM_RIGHT || side == Anchor.TOP_RIGHT) {
-                Shell._self.values().get("shell_width").setValue(mouseX - shellX);
+				if ((int) Shell._self.values().get("shell_width_min").getValue() < mouseX - shellX) {
+					Shell._self.values().get("shell_width").setValue(mouseX - shellX);
+				}
             }
         }
         // ===============================

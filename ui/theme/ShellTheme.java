@@ -238,7 +238,8 @@ public abstract class ShellTheme {
 		}
 		return lines;
 	}
-    public List<String> getLinesWithControlCodes(MinecraftFontRenderer fontRenderer, String input, int startX, int maxWidth) {
+
+	public List<String> getLinesWithControlCodes(MinecraftFontRenderer fontRenderer, String input, int startX, int maxWidth) {
         List<String> lines = new ArrayList<>();
         StringBuilder currentLine = new StringBuilder();
         for (int i = 0; i < input.length(); i++) {
@@ -253,6 +254,36 @@ public abstract class ShellTheme {
         }
         return lines;
     }
+
+    public String cutLine(MinecraftFontRenderer fontRenderer, String input, int startX, int maxWidth) {
+		StringBuilder cutted = new StringBuilder();
+		for (int i = 0; i < input.length(); i++) {
+			if (fontRenderer.getStringWidthWithControlCodes(cutted.toString()) + startX > maxWidth) {
+				return cutted.toString();
+			}
+			cutted.append(input.charAt(i));
+		}
+		return cutted.toString();
+	}
+
+	public String reverseCutLine(MinecraftFontRenderer fontRenderer, String input, int startX, int maxWidth) {
+		StringBuilder cutted = new StringBuilder();
+		for (int i = input.length() - 1; i >= 0; i--) {
+			if (fontRenderer.getStringWidthWithControlCodes(cutted.toString()) + startX > maxWidth) {
+				break;
+			}
+			cutted.append(input.charAt(i));
+		}
+		StringBuilder reverse = new StringBuilder();
+		for (int i = cutted.length() - 1; i >= 0; i--) {
+			reverse.append(cutted.charAt(i));
+		}
+		return reverse.toString();
+	}
+
+
+
+
 	public void _clickDrag(int mouseX, int mouseY) {
 		Shell._self.values().get("shell_x").setValue(Shell._self.getX() + (mouseX - lastX));
 		Shell._self.values().get("shell_y").setValue(Shell._self.getY() + (mouseY - lastY));

@@ -61,8 +61,9 @@ public class Shell {
      */
     public void addDefaultValues() {
         values().put("shell_width", new XValue<Integer>().setValue(350));
-        values().put("shell_height", new XValue<Integer>().setValue(
-                (int) values().get("shell_width").getValue() / 12 * 7));
+        values().put("shell_width_min", new XValue<Integer>().setValue(137));
+        values().put("shell_height", new XValue<Integer>().setValue((int) values().get("shell_width").getValue() / 12 * 7));
+        values().put("shell_height_min", new XValue<Integer>().setValue(20));
 
         values().put("shell_x", new XValue<Integer>().setValue(-777));
         values().put("shell_y", new XValue<Integer>().setValue(-777));
