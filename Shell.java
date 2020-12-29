@@ -5,6 +5,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import sh4ll.etc.StateResult;
 import sh4ll.etc.Tuple;
 import sh4ll.exec.Exec;
+import sh4ll.exec.impl.ClearExec;
 import sh4ll.ui.UIShell;
 import sh4ll.ui.textblock.TextBlock;
 import sh4ll.ui.theme.ShellTheme;
@@ -48,6 +49,7 @@ public class Shell {
         addDefaultValues();
         shellUI = new UIShell();
 
+        /* default clear exec */ registerExec(new ClearExec());
         setTheme(new DarkThemeSh4());
 
     }
