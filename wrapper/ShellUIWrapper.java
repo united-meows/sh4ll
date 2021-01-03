@@ -12,6 +12,7 @@ import sh4ll.etc.RepeatableKey;
 public class ShellUIWrapper extends GuiScreen {
 
     private ArrayList<RepeatableKey> repeatableKeys;
+    private int eraseTick;
 
     public ShellUIWrapper() {
         repeatableKeys = new ArrayList<>();
@@ -38,6 +39,18 @@ public class ShellUIWrapper extends GuiScreen {
                     Shell._self.getShellUI().decreaseCursorPos();
             }
         });
+        repeatableKeys.add(new RepeatableKey(Keyboard.KEY_UP) {
+            @Override
+            public void action() {
+                Shell._self.getShellUI().historyUp();
+            }
+        });
+        repeatableKeys.add(new RepeatableKey(Keyboard.KEY_DOWN) {
+            @Override
+            public void action() {
+                Shell._self.getShellUI().historyDown();
+            }
+        });
     }
 
     @Override
@@ -45,7 +58,6 @@ public class ShellUIWrapper extends GuiScreen {
         Shell._self.close();
     }
 
-    private int eraseTick;
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {

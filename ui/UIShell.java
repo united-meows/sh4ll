@@ -22,7 +22,10 @@ public class UIShell {
     private ShellUIWrapper wrapper;
     private int cursorPos;
     private int scroll;
+    private int historyIndex;
     private boolean canPosScroll,canNegScroll;
+    private char lastChar;
+    private boolean nextChar;
 
     private static final String USER_ALIAS = "$user@$client";
 
@@ -61,17 +64,24 @@ public class UIShell {
                 Shell._self.getWritingInput().append(typedChar);
                 Shell._self.getWritingInput().append(str, cursorPos, str.length());
             }
+            if (nextChar) {
+                lastChar = typedChar;
+                nextChar = false;
+            }
             cursorPos++;
             return;
         }
 
+
+
+
         if (Shell._self.getWritingInput().length() > 0) {
             if (keyCode == Keyboard.KEY_RETURN) {
                 //TODO: Change this to custom textBlock for command input
-                Shell._self.writeLine(new NormalTextBlock("§d" + Shell._self.getShellUI().getCustomUserAlias() + "§5 ~ §f" + Shell._self.getWritingInput().toString()));
-                Shell._self.execute();
+                 Shell._self.execute();
                 cursorPos=0;
                 scroll = 0; /* reset scroll location */
+                historyIndex = Shell._self.getExecuteHistory().size() -1;
                 Shell._self.getWritingInput().delete(0, Shell._self.getWritingInput().length());
             }
         }
@@ -79,9 +89,7 @@ public class UIShell {
         if (keyCode == Keyboard.KEY_C && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL))) {
             String copyText = getTheme().selection();
             if (copyText.length() > 0) {
-                StringSelection selection = new StringSelection(copyText);
-                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                clipboard.setContents(selection, selection);
+
             }
         }
 
@@ -97,9 +105,33 @@ public class UIShell {
 
     }
 
-    public void copySelected() {
-
+    public void historyUp() {
+        if (--historyIndex < 0) {
+            historyIndex = Shell._self.getExecuteHistory().size() -1;
+        }
+        if (!Shell._self.getExecuteHistory().isEmpty()) {
+            Shell._self.setWritingInput(new StringBuilder(Shell._self.getExecuteHistory().get(historyIndex)));
+            cursorPos = Shell._self.getWritingInput().length();
+        }
     }
+
+    public void historyDown() {
+        if (++historyIndex >= Shell._self.getExecuteHistory().size()) {
+            historyIndex = 0;
+        }
+        if (!Shell._self.getExecuteHistory().isEmpty()) {
+            Shell._self.setWritingInput(new StringBuilder(Shell._self.getExecuteHistory().get(historyIndex)));
+            cursorPos = Shell._self.getWritingInput().length();
+        }
+    }
+
+    public void copySelected(String text) {
+        StringSelection selection = new StringSelection(text);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, selection);
+    }
+
+
 
 
 
@@ -122,6 +154,18 @@ public class UIShell {
 
     public void incrementCursorPos() {
         cursorPos++;
+    }
+
+    public char readChar() {
+        nextChar = true;
+        while (nextChar) {
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return lastChar;
     }
 
     public void decreaseCursorPos(){

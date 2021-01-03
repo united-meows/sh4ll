@@ -189,7 +189,7 @@ public class RenderMethods {
 	    String[] split = str.split("");
 	    boolean found = false;
 	    for (int i = 0; i < split.length; i++) {
-	        if (i-1 >= 0 && split[i-1].equals("§")) {
+	        if (i-1 >= 0 && split[i-1].equals("\247")) {
 	            found = true;
             }
 	        if (!found) {
@@ -197,6 +197,6 @@ public class RenderMethods {
             }
 	        found = false;
         }
-	    return result.toString().replace("§","");
+	    return result.toString().replace("\247","");
     }
 }

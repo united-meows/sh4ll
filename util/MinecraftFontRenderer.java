@@ -149,7 +149,7 @@ public class MinecraftFontRenderer extends CFont
             GL11.glBindTexture(3553, this.tex.getGlTextureId());
             for (int i = 0; i < size; ++i) {
                 char character = renamedString.charAt(i);
-                if (character == '§' && i < size) {
+                if (character == '\247' && i < size) {
                     int colorIndex = 21;
                     try {
                         colorIndex = "0123456789abcdefklmnor".indexOf(renamedString.charAt(i + 1));
@@ -270,7 +270,7 @@ public class MinecraftFontRenderer extends CFont
         boolean italic = false;
         for (int size = text.length(), i = 0; i < size; ++i) {
             final char character = text.charAt(i);
-            if (character == '§') {
+            if (character == '\247') {
                 final int colorIndex = "0123456789abcdefklmnor".indexOf(character);
                 if (colorIndex < 16) {
                     bold = false;
@@ -369,7 +369,7 @@ public class MinecraftFontRenderer extends CFont
                 final String word = array[j];
                 for (int i = 0; i < word.toCharArray().length; ++i) {
                     final char c = word.toCharArray()[i];
-                    if (c == '§' && i < word.toCharArray().length - 1) {
+                    if (c == '\247' && i < word.toCharArray().length - 1) {
                         lastColorCode = word.toCharArray()[i + 1];
                     }
                 }
@@ -378,12 +378,12 @@ public class MinecraftFontRenderer extends CFont
                 }
                 else {
                     finalWords.add(currentWord);
-                    currentWord = "§" + lastColorCode + word + " ";
+                    currentWord = "\247" + lastColorCode + word + " ";
                 }
             }
             if (currentWord.length() > 0) {
                 if (this.getStringWidth(currentWord) < width) {
-                    finalWords.add("§" + lastColorCode + currentWord + " ");
+                    finalWords.add("\247" + lastColorCode + currentWord + " ");
                     currentWord = "";
                 }
                 else {
@@ -407,7 +407,7 @@ public class MinecraftFontRenderer extends CFont
         final char[] chars = string.toCharArray();
         for (int i = 0; i < chars.length; ++i) {
             final char c = chars[i];
-            if (c == '§' && i < chars.length - 1) {
+            if (c == '\247' && i < chars.length - 1) {
                 lastColorCode = chars[i + 1];
             }
             if (this.getStringWidth(String.valueOf(currentWord) + c) < width) {
@@ -415,7 +415,7 @@ public class MinecraftFontRenderer extends CFont
             }
             else {
                 finalWords.add(currentWord);
-                currentWord = "§" + lastColorCode + String.valueOf(c);
+                currentWord = "\247" + lastColorCode + String.valueOf(c);
             }
         }
         if (currentWord.length() > 0) {

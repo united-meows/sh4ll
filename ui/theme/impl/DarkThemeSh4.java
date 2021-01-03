@@ -157,7 +157,9 @@ public class DarkThemeSh4 extends ShellTheme {
                         String words = split[i1];
                         if (y >= shellY + DRAGBAR_HEIGHT + 3 && y <= shellY + shellHeight - 10 && mouseY >= y - 2 && mouseY <= y + 6) {
                             if (((clickedX >= wordX && mouseX <= wordX + titleFont.getStringWidth(words)) || (clickedX <= wordX + titleFont.getStringWidth(words) && mouseX >= wordX))) {
-                                indexes[i1] = i1;
+                               	if (indexes.length > i1) {
+									indexes[i1] = i1;
+								}
                                 if (!firstWord) {
                                     selectedTextBlock.setX(wordX - (shellX + 5));
                                     firstWord = true;
@@ -190,9 +192,9 @@ public class DarkThemeSh4 extends ShellTheme {
         }
 
         int writeY = substractY > 0 ? shellY + shellHeight + 8 : y;
-        String writing = reverseCutLine(titleFont, Shell._self.getWritingInput().toString(), 8 + (int)titleFont.getStringWidth("§d" + Shell._self.getShellUI().getCustomUserAlias() + "§5 ~ §f"), shellWidth);
+        String writing = reverseCutLine(titleFont, Shell._self.getWritingInput().toString(), 8 + (int)titleFont.getStringWidth("\247d" + (Shell._self.capturingNextInput() ? "" : (Shell._self.capturingNextInput() ? "" : Shell._self.getShellUI().getCustomUserAlias())) + "\2475 ~ \247f"), shellWidth);
        	boolean isCutted = writing.length() !=  Shell._self.getWritingInput().length();
-        titleFont.drawString("§d" + Shell._self.getShellUI().getCustomUserAlias() + "§5 ~ §f" + writing, shellX + 5, writeY, colors.get("writing").getRGB());
+        titleFont.drawString("\247d" + (Shell._self.capturingNextInput() ? "" : Shell._self.getShellUI().getCustomUserAlias()) + "\2475 ~ \247f" + writing, shellX + 5, writeY, colors.get("writing").getRGB());
 
         // ==============================
 
@@ -204,7 +206,7 @@ public class DarkThemeSh4 extends ShellTheme {
         if (isCutted) {
         	cursorX = -777 /* being lazy is cool */;
 		} else {
-        	cursorX = (int) titleFont.getStringWidth(Shell._self.getShellUI().getCustomUserAlias()) + 10 + (cursorPos == 0 ? 0 : (int) titleFont.getStringWidth(Shell._self.getWritingInput().substring(0, cursorPos))) - 1;
+        	cursorX = (int) titleFont.getStringWidth((Shell._self.capturingNextInput() ? "" : Shell._self.getShellUI().getCustomUserAlias())) + 10 + (cursorPos == 0 ? 0 : (int) titleFont.getStringWidth(Shell._self.getWritingInput().substring(0, cursorPos))) - 1;
 		}
          RenderMethods.drawBorderedRect(5 + shellX + cursorX, writeY - 2, 10 + shellX + cursorX, writeY + 6, 0.5F, insideColor.getRGB(), colors.get("cursor_outline").getRGB());
         // ===============================

@@ -6,8 +6,10 @@ import sh4ll.etc.StateResult;
 import sh4ll.etc.Tuple;
 import sh4ll.exec.Exec;
 import sh4ll.exec.impl.ClearExec;
+import sh4ll.exec.impl.HelpExec;
 import sh4ll.ui.UIShell;
 import sh4ll.ui.textblock.TextBlock;
+import sh4ll.ui.textblock.def.NormalTextBlock;
 import sh4ll.ui.theme.ShellTheme;
 import sh4ll.ui.theme.impl.DarkThemeSh4;
 import sh4ll.value.XValue;
@@ -18,6 +20,8 @@ import java.util.List;
 
 public class Shell {
 
+    private static int MAX_TEXTBLOCKS = 1500;
+    private static int EXECUTE_HISTORY_LIMIT = 70;
     private UIShell shellUI;
     private boolean opened;
     private HashMap<String, XValue> values;
@@ -26,8 +30,10 @@ public class Shell {
     private static boolean DEBUG;
     private ArrayList<Tuple<TextBlock, Boolean>> outputs;
     private ArrayList<Exec> registeredExecs;
-
+    private ArrayList<String> executeHistory;
     private StringBuilder writingInput;
+    private boolean nextInput;
+    private String lastInput;
 
     public void setup(final String clientName, final String userName)
     {
@@ -46,13 +52,16 @@ public class Shell {
         values = new HashMap<>();
         dynamic = new HashMap<>();
         outputs = new ArrayList<>();
+        executeHistory = new ArrayList<>();
         addDefaultValues();
         shellUI = new UIShell();
 
         /* default clear exec */ registerExec(new ClearExec());
+        /* default help exec */ registerExec(new HelpExec());
         setTheme(new DarkThemeSh4());
-
     }
+
+
 
     public void setTheme(ShellTheme theme) {
         shellUI.setTheme(theme);
@@ -80,9 +89,41 @@ public class Shell {
         dynamic().put("open_time", new XValue<Long>().setValue(System.currentTimeMillis()));
     }
 
+    /** gets next line **/
+    public String readLine() {
+        /* if you are accessing this method within a exec you have to enable useThread */
+        nextInput = true;
+        while (nextInput) {
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return lastInput;
+    }
+
+    public char readChar() {
+        return getShellUI().readChar();
+    }
+
     public byte execute() {
         final String input = getWritingInput().toString();
         final String baseCommand = getBaseCommand(input);
+        if (nextInput) {
+            lastInput = input;
+            nextInput = false;
+            return StateResult.UNKNOWN_EXIT;
+        }
+        Shell._self.writeLine(new NormalTextBlock("\247d" + Shell._self.getShellUI().getCustomUserAlias() + "\2475 ~ \247f" + Shell._self.getWritingInput().toString()));
+
+        /* adding to execute history */
+        executeHistory.add(input);
+
+        /* check if history has more than EXECUTE_HISTORY_LIMIT size */
+        if (getExecuteHistory().size() >= EXECUTE_HISTORY_LIMIT) {
+            getExecuteHistory().remove(0);          /* remove first element */
+        }
 
 
         /** EXEC CHECK */
@@ -188,6 +229,13 @@ public class Shell {
         shellUI.onOpen();
     }
 
+    public boolean capturingNextInput() {
+        return nextInput;
+    }
+
+    public void stopCapturing() {
+        nextInput = false;
+    }
 
     public static void setDebug(boolean DEBUG) {
         Shell.DEBUG = DEBUG;
@@ -242,8 +290,16 @@ public class Shell {
         return shellUI;
     }
 
+    public ArrayList<String> getExecuteHistory() {
+        return executeHistory;
+    }
+
     public StringBuilder getWritingInput() {
         return writingInput;
+    }
+
+    public void setWritingInput(StringBuilder writingInput) {
+        this.writingInput = writingInput;
     }
 
     public void registerExec(Exec ex) {

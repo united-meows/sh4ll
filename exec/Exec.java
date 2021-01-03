@@ -91,4 +91,15 @@ public abstract class Exec {
         return null;
     }
 
+    protected Exec getExec(String trigger) {
+        for (Exec exec : Shell._self.getRegisteredExecs()) {
+            for (String execTrigger : exec.getTriggers()) {
+                if (execTrigger.equalsIgnoreCase(trigger)) {
+                    return exec;
+                }
+            }
+        }
+        return null;
+    }
+
 }
