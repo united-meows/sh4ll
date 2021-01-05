@@ -37,8 +37,9 @@ Shell._self.setTheme(new DarkThemeSh4());
 
 ```
 <br>
-## Custom Textblocks
-//TODO: yapsana burayi amk ersini
+
+## Custom Textblocks (TODO)
+
 <br>
 
 ## Exec System Examples 
@@ -84,6 +85,5 @@ public class TestScript extends Exec {
 ```
 
 <br>
-## Built-in games
 
-//TODO:
+## Built-in games (TODO)
