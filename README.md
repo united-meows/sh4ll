@@ -6,33 +6,33 @@ https://github.com/slowcheet4h<br>
 <br>
 Shell for minecraft<br><br>
 Usage: <br>
-````
+```java
 Shell._self.setup("CLIENT_NAME", "USER_NAME");
 
 // registering custom execs
 Shell._self.registerExec(new TestScript());
 Shell._self.registerExec(new InlineInput());
-`````
-
-Open/Close shell
-````java
+```
+<br>
+Open/Close shell<br>
+```java
 Shell._self.open();
 Shell._self.close(); // force close shell
-````
+```
 
 Theme selection<br>
 shell comes with one built-in theme<br>
 
-DarkThemeSh4, ....
-````java
+DarkThemeSh4, ....<br>
+```java
 //note: default theme is already DarkThemeSh4
 Shell._self.setTheme(new DarkThemeSh4());
-````
+```
 <br>
 Custom TextBlocks
 //TODO:
 <br>
-Exec System Examples
+Exec System Examples<br>
 ```java
 public class TestScript extends Exec {
     public TestScript() {
@@ -71,5 +71,5 @@ public class TestScript extends Exec {
  }
 ```
 <br>
-Built-in games
+Built-in games<br>
 //TODO:
