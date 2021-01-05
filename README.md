@@ -7,6 +7,7 @@ https://github.com/slowcheet4h<br>
 Shell for minecraft<br><br>
 Usage: <br> 
 ````
+
 Shell._self.setup("CLIENT_NAME", "USER_NAME");
 
 // registering custom execs
@@ -16,6 +17,7 @@ Shell._self.registerExec(new InlineInput());
 
 Open/Close shell<br> 
 ````
+
 Shell._self.open();
 Shell._self.close(); // force close shell
 ````
@@ -25,6 +27,7 @@ shell comes with one built-in theme<br>
 
 DarkThemeSh4, ....<br> 
 ````
+
 //note: default theme is already DarkThemeSh4
 Shell._self.setTheme(new DarkThemeSh4());
 ````
@@ -34,6 +37,7 @@ Custom TextBlocks
 <br>
 Exec System Examples<br> 
 ```
+
 public class TestScript extends Exec {
     public TestScript() {
         // aliases, inline inputs, description, useThread
