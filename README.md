@@ -1,11 +1,13 @@
 # sh4ll
-made by<br>
+made by
 https://github.com/deadghost2173<br>
 https://github.com/IpanaDev<br>
 https://github.com/slowcheet4h<br>
 <br>
 Shell for minecraft<br><br>
-Usage: <br> 
+
+## Usage
+
 ```java
 
 Shell._self.setup("CLIENT_NAME", "USER_NAME");
@@ -15,7 +17,8 @@ Shell._self.registerExec(new TestScript());
 Shell._self.registerExec(new InlineInput());
 ````
 
-Open/Close shell<br> 
+## Open/Close Shell
+
 ```java
 
 Shell._self.open();
@@ -23,7 +26,7 @@ Shell._self.close(); // force close shell
 
 ```
 
-Theme selection<br>
+## Theme Selection
 shell comes with one built-in theme<br>
 
 DarkThemeSh4, ....<br> 
@@ -34,10 +37,11 @@ Shell._self.setTheme(new DarkThemeSh4());
 
 ```
 <br>
-Custom TextBlocks
-//TODO:
+## Custom Textblocks
+//TODO: yapsana burayi amk ersini
 <br>
-Exec System Examples<br> 
+
+## Exec System Examples 
 
 ```java
 
@@ -80,5 +84,5 @@ public class TestScript extends Exec {
 ```
 
 <br>
-Built-in games
+## Built-in games
 //TODO:
