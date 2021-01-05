@@ -5,7 +5,7 @@ https://github.com/IpanaDev<br>
 https://github.com/slowcheet4h<br>
 <br>
 Shell for minecraft<br><br>
-Usage: <br>
+Usage: <br> 
 ````
 Shell._self.setup("CLIENT_NAME", "USER_NAME");
 
@@ -14,7 +14,7 @@ Shell._self.registerExec(new TestScript());
 Shell._self.registerExec(new InlineInput());
 `````
 
-Open/Close shell
+Open/Close shell<br> 
 ````
 Shell._self.open();
 Shell._self.close(); // force close shell
@@ -23,7 +23,7 @@ Shell._self.close(); // force close shell
 Theme selection<br>
 shell comes with one built-in theme<br>
 
-DarkThemeSh4, ....
+DarkThemeSh4, ....<br> 
 ````
 //note: default theme is already DarkThemeSh4
 Shell._self.setTheme(new DarkThemeSh4());
@@ -32,7 +32,7 @@ Shell._self.setTheme(new DarkThemeSh4());
 Custom TextBlocks
 //TODO:
 <br>
-Exec System Examples
+Exec System Examples<br> 
 ```
 public class TestScript extends Exec {
     public TestScript() {
