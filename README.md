@@ -32,7 +32,7 @@ shell comes with one built-in theme<br>
 DarkThemeSh4, ....<br> 
 ```java
 
-//note: default theme is already DarkThemeSh4
+//note: the default theme is already DarkThemeSh4
 Shell._self.setTheme(new DarkThemeSh4());
 
 ```
@@ -49,7 +49,7 @@ Shell._self.setTheme(new DarkThemeSh4());
 public class TestScript extends Exec {
     public TestScript() {
         // aliases, inline inputs, description, useThread
-        super(new String[]{"testscript", "test_script"}, new String[]{}, "just a test", true /* if you getting input from shell this parameter should be true (readChar, readLine)*/);
+        super(new String[]{"testscript", "test_script"}, new String[]{}, "just a test", true /* if you are getting input from shell this parameter should be true (readChar, readLine)*/);
     }
     
     @Override
@@ -67,7 +67,7 @@ public class TestScript extends Exec {
  public class InlineInput extends Exec{
     // aliases, inline inputs, description, useThread
     public InlineInput() {
-            super(new String[]{"inline"}, new String[]{"testvar1", "testvar2"}, "inlin input test", false);
+            super(new String[]{"inline"}, new String[]{"testvar1", "testvar2"}, "inline input test", false);
     }
     
     @Override
