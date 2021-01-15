@@ -77,7 +77,7 @@ public class TestScript extends Exec {
          String testvar2 = getInput("testvar2"); // value: there
          
          // getInput returns null if empty
-         // hasInput(var) - checks if empty
+         // hasInput(var) - checks if its empty
          
     }
  }
