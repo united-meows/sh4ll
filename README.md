@@ -78,7 +78,7 @@ public class TestScript extends Exec {
          
          // getInput returns null if empty
          // hasInput(var) - checks if its empty
-         
+         return StateResult.EXIT_ON_SUCCESS; 
     }
  }
  
