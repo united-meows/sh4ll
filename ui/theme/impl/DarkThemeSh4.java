@@ -44,7 +44,7 @@ public class DarkThemeSh4 extends ShellTheme {
 	private TextBlock clickedTextBlock;
 	private SelectableTextBlock selectedTextBlock = new SelectableTextBlock(false);
 
-    private static Color TRANSPARANT_COLOR = new Color(0, 0, 0, 0);
+    private static Color TRANSPARENT_COLOR = new Color(0, 0, 0, 0);
 
 	public DarkThemeSh4() {
 		super("DarkTheme", DragMethod.TOP, DRAGBAR_HEIGHT);
@@ -200,7 +200,7 @@ public class DarkThemeSh4 extends ShellTheme {
 
         // CURSOR (POINTER) CODE<
         // ===============================
-        Color insideColor = cursorState && Shell._self.getShellUI().isCursorAtLastChar() ? colors.get("cursor_inside") : TRANSPARANT_COLOR;
+        Color insideColor = cursorState && Shell._self.getShellUI().isCursorAtLastChar() ? colors.get("cursor_inside") : TRANSPARENT_COLOR;
         int cursorPos = Math.max(0, Shell._self.getShellUI().getCursorPos());
         int cursorX;
         if (isCutted) {
