@@ -1,6 +1,7 @@
 # sh4ll
 made by
-https://github.com/deadghost2173<br>
+
+https://github.com/ghost2173<br>
 https://github.com/IpanaDev<br>
 https://github.com/slowcheet4h<br>
 <br>
