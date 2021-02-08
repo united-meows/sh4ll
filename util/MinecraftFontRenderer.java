@@ -73,9 +73,9 @@ public class MinecraftFontRenderer extends CFont
         if (actualString == null) {
             return 0.0f;
         }
-        final String renamedString = actualString.replace('ı', 'i').replace('İ', 'I').replace('ğ', 'g').replace('Ğ', 'G').replace('ç', 'c')
-				.replace('Ç', 'C').replace('ü', 'u').replace('Ü', 'U').replace('ş', 's').replace('Ş', 'S')
-				.replace('ö', 'o').replace('Ö', 'O');
+        final String renamedString = actualString.replace('\u0131', 'i').replace('\u0130', 'I').replace('\u011f', 'g').replace('\u011e', 'G').replace('\u00e7', 'c')
+				.replace('\u00c7', 'C').replace('\u00fc', 'u').replace('\u00dc', 'U').replace('\u015f', 's').replace('\u015e', 'S')
+				.replace('\u00f6', 'o').replace('\u00d6', 'O');
         if (color == 553648127) {
             color = 16777215;
         }
@@ -221,9 +221,9 @@ public class MinecraftFontRenderer extends CFont
         if (text == null) {
             return 0;
         }
-        text = text.replace('ı', 'i').replace('İ', 'I').replace('ğ', 'g').replace('Ğ', 'G').replace('ç', 'c')
-				.replace('Ç', 'C').replace('ü', 'u').replace('Ü', 'U').replace('ş', 's').replace('Ş', 'S')
-				.replace('ö', 'o').replace('Ö', 'O');
+        text = text.replace('\u0131', 'i').replace('\u0130', 'I').replace('\u011f', 'g').replace('\u011e', 'G').replace('\u00e7', 'c')
+				.replace('\u00c7', 'C').replace('\u00fc', 'u').replace('\u00dc', 'U').replace('\u015f', 's').replace('\u015e', 'S')
+				.replace('\u00f6', 'o').replace('\u00d6', 'O');
         double width = 0;
         CharData[] currentData = this.charData;
         boolean bold = false;
@@ -306,9 +306,9 @@ public class MinecraftFontRenderer extends CFont
 
     public List<String> wrapWords(String text, final double width) {
         final List finalWords = new ArrayList();
-        text = text.replace('ı', 'i').replace('İ', 'I').replace('ğ', 'g').replace('Ğ', 'G').replace('ç', 'c')
-				.replace('Ç', 'C').replace('ü', 'u').replace('Ü', 'U').replace('ş', 's').replace('Ş', 'S')
-				.replace('ö', 'o').replace('Ö', 'O');
+        text = text.replace('\u0131', 'i').replace('\u0130', 'I').replace('\u011f', 'g').replace('\u011e', 'G').replace('\u00e7', 'c')
+				.replace('\u00c7', 'C').replace('\u00fc', 'u').replace('\u00dc', 'U').replace('\u015f', 's').replace('\u015e', 'S')
+				.replace('\u00f6', 'o').replace('\u00d6', 'O');
         if (this.getStringWidth(text) > width) {
             final String[] words = text.split(" ");
             String currentWord = "";
@@ -352,9 +352,9 @@ public class MinecraftFontRenderer extends CFont
         final List finalWords = new ArrayList();
         String currentWord = "";
         char lastColorCode = '\uffff';
-        string = string.replace('ı', 'i').replace('İ', 'I').replace('ğ', 'g').replace('Ğ', 'G').replace('ç', 'c')
-				.replace('Ç', 'C').replace('ü', 'u').replace('Ü', 'U').replace('ş', 's').replace('Ş', 'S')
-				.replace('ö', 'o').replace('Ö', 'O');
+        string = string.replace('\u0131', 'i').replace('\u0130', 'I').replace('\u011f', 'g').replace('\u011e', 'G').replace('\u00e7', 'c')
+				.replace('\u00c7', 'C').replace('\u00fc', 'u').replace('\u00dc', 'U').replace('\u015f', 's').replace('\u015e', 'S')
+				.replace('\u00f6', 'o').replace('\u00d6', 'O');
         final char[] chars = string.toCharArray();
         for (int i = 0; i < chars.length; ++i) {
             final char c = chars[i];
