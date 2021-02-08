@@ -179,7 +179,11 @@ public class DarkThemeSh4 extends ShellTheme {
                     }
                 }
                 if (y >= shellY + DRAGBAR_HEIGHT + 3 && y <= shellY + shellHeight - 10)
-                    titleFont.drawString(line, shellX + 5, y, colors.get("output_text").getRGB());
+		 // the text might look like shit on 1.8.0 because of rendering issues so to fix this we make an invisible rect look like shit
+	           Gui.drawRect(0,0,0,0, -1);
+                   titleFont.drawString(line, shellX + 5, y, colors.get("output_text").getRGB());
+		 // the text might look like shit on 1.8.0 because of rendering issues so to fix this we make an invisible rect look like shit
+	           Gui.drawRect(0,0,0,0, -1);
                 if (i + 1 == line.length()) {
                     if (textBlockVal.getSecond()) {
                         y += 10;
@@ -194,10 +198,11 @@ public class DarkThemeSh4 extends ShellTheme {
         int writeY = substractY > 0 ? shellY + shellHeight + 8 : y;
         String writing = reverseCutLine(titleFont, Shell._self.getWritingInput().toString(), 8 + (int)titleFont.getStringWidth("\247d" + (Shell._self.capturingNextInput() ? "" : (Shell._self.capturingNextInput() ? "" : Shell._self.getShellUI().getCustomUserAlias())) + "\2475 ~ \247f"), shellWidth);
        	boolean isCutted = writing.length() !=  Shell._self.getWritingInput().length();
-        titleFont.drawString("\247d" + (Shell._self.capturingNextInput() ? "" : Shell._self.getShellUI().getCustomUserAlias()) + "\2475 ~ \247f" + writing, shellX + 5, writeY, colors.get("writing").getRGB());
-
-        // ==============================
-
+        // the text might look like shit on 1.8.0 because of rendering issues so to fix this we make an invisible rect look like shit
+	Gui.drawRect(0,0,0,0, -1);
+	titleFont.drawString("\247d" + (Shell._self.capturingNextInput() ? "" : Shell._self.getShellUI().getCustomUserAlias()) + "\2475 ~ \247f" + writing, shellX + 5, writeY, colors.get("writing").getRGB());
+ 
+	// ==============================
         // CURSOR (POINTER) CODE<
         // ===============================
         Color insideColor = cursorState && Shell._self.getShellUI().isCursorAtLastChar() ? colors.get("cursor_inside") : TRANSPARENT_COLOR;
