@@ -217,6 +217,10 @@ public class Shell {
         opened = true;
         dynamic().get("open_time").setValue(System.currentTimeMillis());
         ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft());
+        // if you got an error change this ^ to this v
+        // ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+        // or this v idk
+        // ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
         if ((int) values().get("shell_x").getValue() == -777) {
             values().put("shell_x", new XValue<Integer>().setValue((int)(scaledresolution.getScaledWidth() / 2
             - (int)values().get("shell_width").getValue() / 2)));
