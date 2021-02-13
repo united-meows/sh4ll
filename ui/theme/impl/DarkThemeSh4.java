@@ -130,7 +130,7 @@ public class DarkThemeSh4 extends ShellTheme {
 
         int y = shellY + DRAGBAR_HEIGHT + 3 + scrollY - substractY;
         ;
-        //RenderMethods.drawRect(shellX+shellWidth-2,y+(Shell._self.outputs().size()*10)/(Shell._self.outputs().size()*10-scroll),shellX+shellWidth,y+(Shell._self.outputs().size()*10)/(Shell._self.outputs().size()*10-scroll)+10, Color.white.getRGB());
+        // RenderMethods.drawRect(shellX+shellWidth-2,y+(Shell._self.outputs().size()*10)/(Shell._self.outputs().size()*10-scroll),shellX+shellWidth,y+(Shell._self.outputs().size()*10)/(Shell._self.outputs().size()*10-scroll)+10, Color.white.getRGB());
         if (clickedTextBlock == null && y + selectedTextBlock.getY() >= shellY + DRAGBAR_HEIGHT && y + selectedTextBlock.getY() + selectedTextBlock.getHeight() <= shellY + shellHeight) {
         	Gui.drawRect(0,0,0,0, -1);
         	titleFont.drawString(selectedTextBlock.getString(), 2, 2, colors.get("owner").getRGB());
