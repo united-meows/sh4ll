@@ -132,7 +132,8 @@ public class DarkThemeSh4 extends ShellTheme {
         ;
         //RenderMethods.drawRect(shellX+shellWidth-2,y+(Shell._self.outputs().size()*10)/(Shell._self.outputs().size()*10-scroll),shellX+shellWidth,y+(Shell._self.outputs().size()*10)/(Shell._self.outputs().size()*10-scroll)+10, Color.white.getRGB());
         if (clickedTextBlock == null && y + selectedTextBlock.getY() >= shellY + DRAGBAR_HEIGHT && y + selectedTextBlock.getY() + selectedTextBlock.getHeight() <= shellY + shellHeight) {
-            titleFont.drawString(selectedTextBlock.getString(), 2, 2, colors.get("owner").getRGB());
+        	Gui.drawRect(0,0,0,0, -1);
+        	titleFont.drawString(selectedTextBlock.getString(), 2, 2, colors.get("owner").getRGB());
             //titleFont.drawString(RenderMethods.clearColorCodes(selectedTextBlock.getText()),2,12, colors.get("owner").getRGB());
             RenderMethods.drawRect(shellX + 5 + selectedTextBlock.getX(), y + selectedTextBlock.getY(), shellX + 5 + selectedTextBlock.getWidth(), y + selectedTextBlock.getY() + selectedTextBlock.getHeight(), new Color(255, 2, 2, 100).getRGB());
         }
@@ -179,9 +180,11 @@ public class DarkThemeSh4 extends ShellTheme {
                         }
                     }
                 }
-                if (y >= shellY + DRAGBAR_HEIGHT + 3 && y <= shellY + shellHeight - 10)
-                	 Gui.drawRect(0,0,0,0, -1);
+                if (y >= shellY + DRAGBAR_HEIGHT + 3 && y <= shellY + shellHeight - 10) {
+                	Gui.drawRect(0,0,0,0, -1);
                 	titleFont.drawString(line, shellX + 5, y, colors.get("output_text").getRGB());
+                    
+                }
                 if (i + 1 == line.length()) {
                     if (textBlockVal.getSecond()) {
                         y += 10;
@@ -192,7 +195,6 @@ public class DarkThemeSh4 extends ShellTheme {
                 i++;
             }
         }
-
         int writeY = substractY > 0 ? shellY + shellHeight + 8 : y;
         String writing = reverseCutLine(titleFont, Shell._self.getWritingInput().toString(), 8 + (int)titleFont.getStringWidth("\247d" + (Shell._self.capturingNextInput() ? "" : (Shell._self.capturingNextInput() ? "" : Shell._self.getShellUI().getCustomUserAlias())) + "\2475 ~ \247f"), shellWidth);
        	boolean isCutted = writing.length() !=  Shell._self.getWritingInput().length();
@@ -245,7 +247,6 @@ public class DarkThemeSh4 extends ShellTheme {
         }
         // ===============================
     }
-
 
 
 	@Override
