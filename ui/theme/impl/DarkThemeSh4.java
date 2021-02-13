@@ -112,6 +112,7 @@ public class DarkThemeSh4 extends ShellTheme {
         GL11.glPushMatrix();
         RenderMethods.drawGradientRect(shellX, shellY, shellX + shellWidth, shellY + DRAGBAR_HEIGHT, colors.get("dragbar_start").getRGB(), colors.get("dragbar_end").getRGB());
         GL11.glPopMatrix();
+        Gui.drawRect(0,0,0,0, -1);
         titleFont.drawString(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase(), (float) (shellX + shellWidth / 2f - titleFont.getStringWidth(Shell._self.dynamic().get("client_name").getValue().toString().toLowerCase() + "@" + Shell._self.dynamic().get("client_username").getValue().toString().toLowerCase()) / 2f), shellY + 8, colors.get("owner").getRGB());
 
 
@@ -179,11 +180,8 @@ public class DarkThemeSh4 extends ShellTheme {
                     }
                 }
                 if (y >= shellY + DRAGBAR_HEIGHT + 3 && y <= shellY + shellHeight - 10)
-		 // the text might look like shit on 1.8.0 because of rendering issues so to fix this we make an invisible rect look like shit
-	           Gui.drawRect(0,0,0,0, -1);
-                   titleFont.drawString(line, shellX + 5, y, colors.get("output_text").getRGB());
-		 // the text might look like shit on 1.8.0 because of rendering issues so to fix this we make an invisible rect look like shit
-	           Gui.drawRect(0,0,0,0, -1);
+                	 Gui.drawRect(0,0,0,0, -1);
+                	titleFont.drawString(line, shellX + 5, y, colors.get("output_text").getRGB());
                 if (i + 1 == line.length()) {
                     if (textBlockVal.getSecond()) {
                         y += 10;
