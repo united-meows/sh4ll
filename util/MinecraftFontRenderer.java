@@ -174,12 +174,10 @@ public class MinecraftFontRenderer extends CFont
                     ++i;
                 }
                 else if (character < currentData.length && character >= '\0') {
-                    final boolean developement = true;
-                    final String character2 = this.toRandom(String.valueOf(character));
                     GL11.glBegin(4);
-                    final int m = 5;
                     if (randomCase) {
-                        char newChar;
+                        char newChar;			
+			// 128 is the randomness multiplier of the obfuscated text
                         for (newChar = '\0'; this.charData[newChar].width != this.charData[character].width; newChar = (char)(Math.random() * 128.0)) {}
                         if (character != ' ') {
                             character = newChar;
