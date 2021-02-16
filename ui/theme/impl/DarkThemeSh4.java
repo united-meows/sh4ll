@@ -338,11 +338,11 @@ public class DarkThemeSh4 extends ShellTheme {
 		// cursor state change
 		if (isTyping()) {
 			if (cursorTicks % 4 == 0) {
-				cursorState = !cursorState;
+				cursorState ^= true;
 			}
 		} else {
 			if (cursorTicks % 10 == 0) {
-				cursorState = !cursorState;
+				cursorState ^= true;
 			}
 		}
 	}
