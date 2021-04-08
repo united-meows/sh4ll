@@ -7,9 +7,9 @@ https://github.com/slowcheet4h<br>
 <br>
 Shell for minecraft<br><br>
 
-watch these videos to integrate the shell
-https://youtu.be/bSLVQ7CsOuM (best)
-https://youtu.be/PQj6K6YbKmc (lines go out of shell bug fixed)
+watch these videos to integrate the shell<br>
+https://youtu.be/bSLVQ7CsOuM (best)<br>
+https://youtu.be/PQj6K6YbKmc (lines go out of shell bug fixed)<br>
 
 
 
