@@ -8,8 +8,8 @@ https://github.com/slowcheet4h<br>
 Shell for minecraft<br><br>
 
 
-https://youtu.be/bSLVQ7CsOuM (how to add shell to a client & how to add commands)
-https://youtu.be/PQj6K6YbKmc (how to add commands)
+https://youtu.be/bSLVQ7CsOuM (how to add shell to a client & how to add commands)<br>
+https://youtu.be/PQj6K6YbKmc (how to add commands)<br>
 
 
 
